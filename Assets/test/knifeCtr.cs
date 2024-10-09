@@ -7,15 +7,18 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class knifeCtr : MonoBehaviour
 {
     public Transform knifePos;
-    public bool isKnife; //칼 사용중이냐
-    public bool isKnifePos; //칼이 제자리에 있냐
+    public bool isKnife=true; //칼 사용중이냐
+    public bool isKnifePos=true; //칼이 제자리에 있냐
 
-    public GameObject cutObject;
+    
+    public GameObject table;
 
     private XRGrabInteractable grabInteractable;
 
     private void Awake()
     {
+        isKnife = true;
+        isKnifePos  = true;
         transform.position = knifePos.position;
         grabInteractable = GetComponent<XRGrabInteractable>();
     }
@@ -38,6 +41,7 @@ public class knifeCtr : MonoBehaviour
     private void OnGrabBegin(SelectEnterEventArgs args)
     {
         Debug.Log($"{gameObject.name}가 잡혔습니다.");
+        table.SetActive(false);
         isKnife = true;
         isKnifePos = false;
     }
@@ -45,6 +49,7 @@ public class knifeCtr : MonoBehaviour
     private void OnGrabEnd(SelectExitEventArgs args)
     {
         Debug.Log($"{gameObject.name}가 놓였습니다.");
+        table.SetActive(true);
         isKnife = false;
     }
 
@@ -58,7 +63,7 @@ public class knifeCtr : MonoBehaviour
         //낫이 사용중이 아니고 자리에 없다면 5초 뒤에 원위치로
         if (knifePos != null && !isKnife && !isKnifePos)
         {
-            Invoke("ReturnKnifeAfterDelay", 5f);
+            Invoke("ReturnKnifeAfterDelay", 3f);
         }
     }
 
@@ -68,13 +73,5 @@ public class knifeCtr : MonoBehaviour
         transform.position = knifePos.position;
         isKnife = false;
         isKnifePos = true;
-    }
-
-    private void OnTriggerEnter(Collider collision)
-    {
-        if (collision.gameObject.tag == "trash")
-        {
-            cutObject.SetActive(true);
-        }
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - knife
   - trash
+  - GarbageBag
   layers:
   - Default
   - TransparentFX
