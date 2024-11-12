@@ -40,7 +40,7 @@ public class knifeCtr : MonoBehaviour
 
     private void OnGrabBegin(SelectEnterEventArgs args)
     {
-        Debug.Log($"{gameObject.name}가 잡혔습니다.");
+        //Debug.Log($"{gameObject.name}가 잡혔습니다.");
         table.SetActive(false);
         isKnife = true;
         isKnifePos = false;
@@ -48,7 +48,7 @@ public class knifeCtr : MonoBehaviour
 
     private void OnGrabEnd(SelectExitEventArgs args)
     {
-        Debug.Log($"{gameObject.name}가 놓였습니다.");
+        //Debug.Log($"{gameObject.name}가 놓였습니다.");
         table.SetActive(true);
         isKnife = false;
     }
@@ -60,10 +60,10 @@ public class knifeCtr : MonoBehaviour
 
     void ReturnKnife()
     {
-        //낫이 사용중이 아니고 자리에 없다면 5초 뒤에 원위치로
+        //낫이 사용중이 아니고 자리에 없다면 원위치로
         if (knifePos != null && !isKnife && !isKnifePos)
         {
-            Invoke("ReturnKnifeAfterDelay", 3f);
+            Invoke("ReturnKnifeAfterDelay", 2f);
         }
     }
 
@@ -73,5 +73,6 @@ public class knifeCtr : MonoBehaviour
         transform.position = knifePos.position;
         isKnife = false;
         isKnifePos = true;
+        gameObject.SetActive(true);
     }
 }
