@@ -55,7 +55,7 @@ public class knifeCtr : MonoBehaviour
 
     private void Update()
     {
-        ReturnKnife();
+        //ReturnKnife();
     }
 
     void ReturnKnife()
