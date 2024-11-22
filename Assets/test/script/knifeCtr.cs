@@ -14,13 +14,15 @@ public class knifeCtr : MonoBehaviour
     public GameObject table;
 
     private XRGrabInteractable grabInteractable;
+    private Rigidbody rb;
 
     private void Awake()
     {
-        isKnife = true;
+        /*isKnife = true;
         isKnifePos  = true;
-        transform.position = knifePos.position;
+        transform.position = knifePos.position;*/
         grabInteractable = GetComponent<XRGrabInteractable>();
+        rb = GetComponent<Rigidbody>();
     }
 
     private void OnEnable()
@@ -41,6 +43,7 @@ public class knifeCtr : MonoBehaviour
     private void OnGrabBegin(SelectEnterEventArgs args)
     {
         //Debug.Log($"{gameObject.name}가 잡혔습니다.");
+        rb.isKinematic = false;
         table.SetActive(false);
         isKnife = true;
         isKnifePos = false;

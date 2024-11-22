@@ -17,10 +17,12 @@ namespace Rito.TexturePainter
         private Collider prevCollider;
         private Texture2D CopiedBrushTexture;
         private Vector2 sameUvPoint;
+        private Rigidbody Rigidbody;
+
+
 
         // 충돌 시간 추적용 필드
-        private float collisionStartTime = -1f;
-        public float limitTime = 2f;
+        private Dictionary<Collider, float> collisionTimeTracker = new Dictionary<Collider, float>();
 
         private void Awake()
         {
@@ -31,79 +33,81 @@ namespace Rito.TexturePainter
             CopyBrushTexture();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            
+            UpdateBrushColorOnEditor();
+
+            if (Input.GetMouseButton(0) == false) return;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            {
+                Collider currentCollider = hit.collider;
+                if (currentCollider != null)
+                {
+                    if (prevCollider == null || prevCollider != currentCollider)
+                    {
+                        prevCollider = currentCollider;
+                        currentCollider.TryGetComponent(out paintTarget);
+                    }
+
+                    if (sameUvPoint != hit.textureCoord)
+                    {
+                        sameUvPoint = hit.textureCoord;
+                        Vector2 pixelUV = hit.textureCoord;
+                        pixelUV.x *= paintTarget.resolution;
+                        pixelUV.y *= paintTarget.resolution;
+                        paintTarget.DrawTexture(pixelUV.x, pixelUV.y, brushSize, CopiedBrushTexture);
+                    }
+                }
+            }
         }
 
-        private void OnCollisionEnter(Collision collision)
+        private Vector2 GetUVCoordinate(TexturePaintTarget target, Vector3 hitPoint)
         {
-            if (collision.gameObject.tag != "GarbageBag") return;
-            Debug.Log("충돌 시작");
-            // 충돌 시작 시간을 기록
-            collisionStartTime = Time.time;
+            // 충돌 지점과 타겟 메쉬의 UV 좌표 매핑
+            MeshCollider meshCollider = target.GetComponent<MeshCollider>();
+            if (meshCollider == null) return Vector2.zero;
+
+            RaycastHit hit;
+            if (Physics.Raycast(hitPoint + Vector3.up * 0.1f, Vector3.down, out hit, 1f))
+            {
+                if (hit.collider == meshCollider)
+                {
+                    Vector2 pixelUV = hit.textureCoord;
+                    pixelUV.x *= target.resolution;
+                    pixelUV.y *= target.resolution;
+                    return pixelUV;
+                }
+            }
+            return Vector2.zero;
         }
 
         private void OnCollisionStay(Collision collision)
         {
-            if (collision.gameObject.tag != "GarbageBag") return;
-            foreach (ContactPoint contact in collision.contacts)
+            // 충돌한 오브젝트에서 TexturePaintTarget 컴포넌트 검색
+            if (collision.collider.TryGetComponent(out TexturePaintTarget paintTarget))
             {
-                //Debug.Log(contact.point);
-                PaintAtCollisionPoint(contact.point, collision.collider);
+                // 충돌 지점 가져오기
+                foreach (ContactPoint contact in collision.contacts)
+                {
+                    // UV 좌표 계산
+                    Vector2 pixelUV = GetUVCoordinate(paintTarget, contact.point);
+
+                    // UV 좌표 유효성 검사 및 그림 그리기
+                    if (pixelUV != sameUvPoint)
+                    {
+                        sameUvPoint = pixelUV; // 중복 방지
+                        paintTarget.DrawTexture(pixelUV.x, pixelUV.y, brushSize, CopiedBrushTexture);
+                    }
+                }
             }
         }
 
         private void OnCollisionExit(Collision collision)
         {
-            if (collision.gameObject.tag != "GarbageBag") return;
-            Debug.Log("충돌 끝");
-
-            // 2초 이상
-            if (collisionStartTime > 0 && (Time.time - collisionStartTime >= limitTime))
+            if (collisionTimeTracker.ContainsKey(collision.collider))
             {
-                Debug.Log("2초 후");
-                GameManager.instance.isPaint = 1;
-            }
-            // 2초 이하
-            if (collisionStartTime > 0 && (Time.time - collisionStartTime < limitTime))
-            {
-                Debug.Log("2초 전");
-                GameManager.instance.isPaint = 2;
-            }
-            
-
-            // 충돌 종료 시 기록 초기화
-            collisionStartTime = -1f;
-        }
-
-        private void PaintAtCollisionPoint(Vector3 hitPoint, Collider collider)
-        {
-            if (collider.CompareTag("GarbageBag"))
-            {
-                if (collider != prevCollider)
-                {
-                    prevCollider = collider;
-                    collider.TryGetComponent(out paintTarget);
-                }
-
-                if (paintTarget != null)
-                {
-                    Vector2 uv;
-                    Ray ray = new Ray(hitPoint, transform.forward);
-                    if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider == collider)
-                    {
-                        uv = hit.textureCoord;
-                        uv.x *= paintTarget.resolution;
-                        uv.y *= paintTarget.resolution;
-
-                        if (sameUvPoint != uv)
-                        {
-                            sameUvPoint = uv;
-                            paintTarget.DrawTexture(uv.x, uv.y, brushSize, CopiedBrushTexture);
-                        }
-                    }
-                }
+                collisionTimeTracker.Remove(collision.collider);
             }
         }
 
@@ -156,9 +160,13 @@ namespace Rito.TexturePainter
             {
                 for (int x = 0; x < width; x++)
                 {
-                    Color c = brushColor;
+                    /*Color c = brushColor;
                     c.a *= brushTexture.GetPixel(x, y).a;
-                    CopiedBrushTexture.SetPixel(x, y, c);
+                    CopiedBrushTexture.SetPixel(x, y, c);*/
+
+                    Color originalColor = brushTexture.GetPixel(x, y);
+                    Color finalColor = originalColor * brushColor; // 색상 조합
+                    CopiedBrushTexture.SetPixel(x, y, finalColor);
                 }
             }
 

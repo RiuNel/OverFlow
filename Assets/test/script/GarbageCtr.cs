@@ -28,16 +28,7 @@ public class GarbageCtr : MonoBehaviour
 
         GameManager.instance.isPaint = 0;
         isTouch = false;
-    }
-    private void Update()
-    {
-        if (GameManager.instance.hp <= 0)
-        {
-            GameManager.instance.hpEnd();
-        }
-
-        paintOK();
-    }
+   }
 
 
     void showTrash()
@@ -78,7 +69,7 @@ public class GarbageCtr : MonoBehaviour
         first.SetActive(false);
     }
 
-    private void paintOK()
+    /*private void paintOK()
     {
         // 2초 이상
         if(GameManager.instance.isPaint == 1 && !isTouch)
@@ -95,9 +86,17 @@ public class GarbageCtr : MonoBehaviour
             Debug.Log("오염물질 분출");
             Invoke("showTrash", 3f);
         }
-    }
+    }*/
 
-    
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "knife" && !isTouch)
+        {
+            isTouch = true;
+            Invoke("showTrash", 5f);
+        }
+    }
 
     /*private void OnTriggerEnter(Collider collision)
     {

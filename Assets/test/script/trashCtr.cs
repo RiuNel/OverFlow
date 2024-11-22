@@ -27,7 +27,7 @@ public class trashCtr : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.instance.hp <= 0)
+        if (GameManager.instance.hp <= 0)
         {
             GameManager.instance.hpEnd();
             Invoke("ReGame", 3f);
