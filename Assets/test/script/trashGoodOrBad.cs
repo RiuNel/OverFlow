@@ -5,16 +5,17 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class trashGoodOrBad : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public GameObject OX;
+    private Color color;
+
+    private void Start()
     {
-        
+        color = OX.GetComponent<SpriteRenderer>().color;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void reMaterial()
     {
-        
+        OX.GetComponent<SpriteRenderer>().color = color;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,13 +24,19 @@ public class trashGoodOrBad : MonoBehaviour
 
         if (other.gameObject.tag == this.tag)
         {
+            OX.GetComponent<SpriteRenderer>().color = Color.red;
             Debug.Log("-----------------정답");
+            Invoke("reMaterial", 1.0f);
             Destroy(other.gameObject);
         }
         else
         {
+            OX.GetComponent<SpriteRenderer>().color = Color.black;
             Debug.Log("오답");
+            Invoke("reMaterial", 1.0f);
             Destroy(other.gameObject);
         }
     }
+
+
 }

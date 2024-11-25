@@ -160,13 +160,13 @@ namespace Rito.TexturePainter
             {
                 for (int x = 0; x < width; x++)
                 {
-                    /*Color c = brushColor;
+                    Color c = brushColor;
                     c.a *= brushTexture.GetPixel(x, y).a;
-                    CopiedBrushTexture.SetPixel(x, y, c);*/
+                    CopiedBrushTexture.SetPixel(x, y, c);
 
-                    Color originalColor = brushTexture.GetPixel(x, y);
+                    /*Color originalColor = brushTexture.GetPixel(x, y);
                     Color finalColor = originalColor * brushColor; // 색상 조합
-                    CopiedBrushTexture.SetPixel(x, y, finalColor);
+                    CopiedBrushTexture.SetPixel(x, y, finalColor);*/
                 }
             }
 

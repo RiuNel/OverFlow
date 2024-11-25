@@ -6,34 +6,27 @@ using UnityEngine.UIElements;
 
 public class GarbageCtr : MonoBehaviour
 {
-    public GameObject cutObject;
     public GameObject[] trash;
-    public GameObject trashUI;
+    //public GameObject trashUI;
     public GameObject first;
 
     bool isSame;
-    public int[] r = new int[GameManager.num];
+    public int[] r;
     public Transform[] trashPos;
 
     public bool isTouch = false;
 
    private void OnEnable()
     {
-        cutObject.SetActive(false);
-        for (int i = 0; i < GameManager.num; i++)
-        {
-            r[i] = 0;
-            GameManager.instance.rTag[i] = true;
-        }
-
-        GameManager.instance.isPaint = 0;
+        //GameManager.instance.isPaint = 0;
         isTouch = false;
-   }
+        r = new int[trashPos.Length];
+    }
 
 
     void showTrash()
     {
-        for (int i = 0; i < GameManager.num; i++) //쓰레기 3개 추첨
+        for (int i = 0; i < trashPos.Length; i++) //쓰레기 3개 추첨
         {
             do
             {
@@ -49,14 +42,9 @@ public class GarbageCtr : MonoBehaviour
                     }
                 }
             } while (isSame);
-
-            if (trash[r[i]].tag == "trashBad") //Bed -> false
-            {
-                GameManager.instance.rTag[i] = false;
-            }
         }
 
-        for (int i = 0; i < GameManager.num; i++)
+        for (int i = 0; i < trashPos.Length; i++)
         {
             trash[r[i]].transform.position = trashPos[i].position;
             trash[r[i]].SetActive(true);
@@ -64,7 +52,7 @@ public class GarbageCtr : MonoBehaviour
 
 
 
-        trashUI.SetActive(true);
+        //trashUI.SetActive(true);
 
         first.SetActive(false);
     }
@@ -94,7 +82,7 @@ public class GarbageCtr : MonoBehaviour
         if (collision.gameObject.tag == "knife" && !isTouch)
         {
             isTouch = true;
-            Invoke("showTrash", 5f);
+            Invoke("showTrash", 3f);
         }
     }
 

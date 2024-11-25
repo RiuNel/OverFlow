@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class trashCtr : MonoBehaviour
 {
-    public TextMeshProUGUI text;
+    /*public TextMeshProUGUI text;
     public bool[] result = new bool[GameManager.num];
     public bool finalResult;
     public GameObject resultUI;
@@ -95,6 +95,6 @@ public class trashCtr : MonoBehaviour
         trashUI.SetActive(false);
         resultUI.SetActive(false);
         first.SetActive(true);
-    }
+    }*/
 
 }
