@@ -9,16 +9,19 @@ public class LevelController : MonoBehaviour
     public LevelState currentLevel = LevelState.None;
     private LevelState previousLevel = LevelState.None;
 
+    public GameObject fadeScreen;
+    public bool isTouchingTruck = false;
+    private bool hasFadedOut = false;
     public GameObject[] level1Section;
     public GameObject[] level2Section;
     public GameObject[] level3Section;
     public GameObject Truck;
 
     //테스트 변수
-    public bool levelChange = false;    
+    public bool levelChange = false;
 
     private readonly Vector3 initialTruckPosition = new Vector3(0, 0, 1); // 트럭의 초기 위치
-    
+
 
     void Start()
     {
@@ -61,12 +64,15 @@ public class LevelController : MonoBehaviour
         {
             case LevelState.Level1:
                 moveToStep.Level1Move(moveToStep.targetPositions[0], moveToStep.targetPositions[1]);
+                FinishFade(/*초넣기*/);
                 break;
             case LevelState.Level2:
                 moveToStep.Level2Move(moveToStep.targetPositions[2], moveToStep.targetPositions[3]);
+                FinishFade(/*초넣기*/);
                 break;
             case LevelState.Level3:
                 moveToStep.Level3Move(moveToStep.targetPositions[4], moveToStep.targetPositions[5]);
+                FinishFade(/*초넣기*/);
                 break;
         }
     }
@@ -80,21 +86,22 @@ public class LevelController : MonoBehaviour
                 InitializeTruckPosition();
                 moveToStep.stop = false;
                 narrationControl.level1_start_narration = true;
-                
+
+                StartFade();
                 break;
             case LevelState.Level2:
                 ShowLevel(level2Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
                 narrationControl.level2_start_narration = true;
-
+                StartFade();
                 break;
             case LevelState.Level3:
                 ShowLevel(level3Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
                 narrationControl.level3_start_narration = true;
-
+                StartFade();
                 break;
             default:
                 HideAllLevels();
@@ -139,8 +146,43 @@ public class LevelController : MonoBehaviour
         }
     }
 
+    private void FinishFade(float fadeDuration = 2f)
+    {
+        if (isTouchingTruck && !hasFadedOut)
+        {
+            fadeScreen.GetComponent<FadeScreen>().FadeOut(fadeDuration);
+            hasFadedOut = true; // 한 번 실행했음을 기록
+            StartCoroutine(ChangeNextLevel());
+        }
+    }
+
+    private void StartFade(float fadeDuration = 2f)
+    {
+
+        fadeScreen.GetComponent<FadeScreen>().FadeIn(fadeDuration);
+
+    }
     public void ChangeLevel(LevelState newLevel)
     {
         currentLevel = newLevel;
+    }
+    IEnumerator ChangeNextLevel()
+    {
+        yield return new WaitForSeconds(2f);
+        hasFadedOut = false;
+        switch (currentLevel)
+        {
+            case LevelState.None:
+                currentLevel = LevelState.Level1;
+                break;
+            case LevelState.Level1:
+                currentLevel = LevelState.Level2;
+                break;
+            case LevelState.Level2:
+                currentLevel = LevelState.Level3;
+                break;
+            case LevelState.Level3:
+                break;
+        }
     }
 }
