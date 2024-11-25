@@ -20,7 +20,15 @@ public class trashGoodOrBad : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer != LayerMask.NameToLayer("trash")) { return; }
+        if (other.gameObject.layer == LayerMask.NameToLayer("trash"))
+        {
+            if (!other.gameObject.GetComponent<isGrabCtr>().isGrab) return;
+        }
+        else
+        //if (other.gameObject.layer != LayerMask.NameToLayer("trash"))
+        {
+            return;
+        }
 
         if (other.gameObject.tag == this.tag)
         {

@@ -7,10 +7,10 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class knifeCtr : MonoBehaviour
 {
     /*public Transform knifePos;
-    public bool isKnife=true; //칼 사용중이냐
-    public bool isKnifePos=true; //칼이 제자리에 있냐
+    public bool isKnife = true; //칼 사용중이냐
+    public bool isKnifePos = true; //칼이 제자리에 있냐
 
-    
+
     public GameObject table;
 
     private XRGrabInteractable grabInteractable;
@@ -18,22 +18,20 @@ public class knifeCtr : MonoBehaviour
 
     private void Awake()
     {
-        *//*isKnife = true;
-        isKnifePos  = true;
-        transform.position = knifePos.position;*//*
+        isKnife = true;
+        isKnifePos = true;
+        transform.position = knifePos.position;
         grabInteractable = GetComponent<XRGrabInteractable>();
         rb = GetComponent<Rigidbody>();
-    }*/
+    }
 
     private void OnEnable()
     {
-        GameManager.instance.isGrab = false;
-
-        /*// selectEntered 이벤트에 리스너 추가
+        // selectEntered 이벤트에 리스너 추가
         grabInteractable.selectEntered.AddListener(OnGrabBegin);
-        grabInteractable.selectExited.AddListener(OnGrabEnd);*/
+        grabInteractable.selectExited.AddListener(OnGrabEnd);
     }
-/*
+
     private void OnDisable()
     {
         // 이벤트 리스너 제거

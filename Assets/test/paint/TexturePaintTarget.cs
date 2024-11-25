@@ -103,6 +103,7 @@ namespace Rito.TexturePainter
             // 마테리얼의 프로퍼티에 렌더 텍스쳐 넣어주기
             TextureBlock.SetTexture(PaintTexPropertyName, renderTexture);
             _mr.SetPropertyBlock(TextureBlock);
+
         }
 
         #endregion

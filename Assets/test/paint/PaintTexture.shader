@@ -1,7 +1,4 @@
-﻿// https://www.patreon.com/posts/rendertexture-15961186
-// https://pastebin.com/LxDYqWBh
-
-Shader "Rito/PaintTexture"
+﻿Shader "Rito/PaintTextureURP"
 {
     Properties
     {
@@ -11,40 +8,62 @@ Shader "Rito/PaintTexture"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 200
-
-        CGPROGRAM
-        // Physically based Standard lighting model, and enable shadows on all light types
-        #pragma surface surf Standard fullforwardshadows
-
-        sampler2D _MainTex;
-        sampler2D _PaintTex;
-        fixed4 _Color;
-
-        struct Input
+        Tags { "RenderPipeline" = "UniversalRenderPipeline" }
+        Pass
         {
-            float2 uv_MainTex;
-        };
+            Name "ForwardLit"
+            Tags { "LightMode" = "UniversalForward" }
 
-        UNITY_INSTANCING_BUFFER_START(Props)
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
 
-            //UNITY_DEFINE_INSTANCED_PROP(sampler2D, _PaintTex)
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-        UNITY_INSTANCING_BUFFER_END(Props)
+            struct Attributes
+            {
+                float3 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
+            };
 
-        void surf (Input IN, inout SurfaceOutputStandard o)
-        {
-            //sampler2D paintTex = UNITY_ACCESS_INSTANCED_PROP(Props, _PaintTex);
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
+            };
 
-            fixed4 main = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-            fixed4 painted = tex2D (_PaintTex, IN.uv_MainTex);
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
 
-            o.Emission = lerp(main.rgb, painted.rgb, painted.a);
+            TEXTURE2D(_PaintTex);
+            SAMPLER(sampler_PaintTex);
 
-            o.Alpha = main.a * painted.a;
+            float4 _Color;
+
+            // Vertex Shader
+            Varyings vert(Attributes v)
+            {
+                Varyings o;
+                o.positionHCS = TransformObjectToHClip(float4(v.positionOS, 1.0));
+                o.uv = v.uv;
+                return o;
+            }
+
+            // Fragment Shader
+            float4 frag(Varyings i) : SV_Target
+            {
+                // Sample textures
+                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                float4 paintTex = SAMPLE_TEXTURE2D(_PaintTex, sampler_PaintTex, i.uv);
+
+                // Blend main texture with painted texture
+                float3 blendedColor = lerp(mainTex.rgb * _Color.rgb, paintTex.rgb, paintTex.a);
+                float alpha = mainTex.a * paintTex.a;
+
+                return float4(blendedColor, alpha);
+            }
+
+            ENDHLSL
         }
-        ENDCG
     }
-    FallBack "Diffuse"
 }

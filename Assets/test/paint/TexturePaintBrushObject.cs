@@ -84,7 +84,10 @@ namespace Rito.TexturePainter
 
         private void OnCollisionStay(Collision collision)
         {
-            if (!GameManager.instance.isGrab) return;
+            if (collision.gameObject.tag == "knife")
+            {
+                if (!collision.gameObject.GetComponent<isGrabCtr>().isGrab) return;
+            }
 
             // 충돌한 오브젝트에서 TexturePaintTarget 컴포넌트 검색
             if (collision.collider.TryGetComponent(out TexturePaintTarget paintTarget))

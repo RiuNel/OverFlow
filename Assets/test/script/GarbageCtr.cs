@@ -16,9 +16,14 @@ public class GarbageCtr : MonoBehaviour
 
     public bool isTouch = false;
 
+    /*private float collisionTime; // 충돌이 시작된 시간을 기록
+    private float elapsedTime; // 충돌 시간 기록
+    private bool isColliding;    // 현재 충돌 중인지 확인
+    private float safeTime = 3f;*/
+
+
     private void OnEnable()
     {
-        //GameManager.instance.isPaint = 0;
         isTouch = false;
         r = new int[trashPos.Length];
     }
@@ -46,57 +51,61 @@ public class GarbageCtr : MonoBehaviour
 
         for (int i = 0; i < trashPos.Length; i++)
         {
+            Debug.Log(r[i]);
             trash[r[i]].transform.position = trashPos[i].position;
             trash[r[i]].SetActive(true);
         }
 
-
-
-        //trashUI.SetActive(true);
-
         first.SetActive(false);
     }
-
-    /*private void paintOK()
-    {
-        // 2초 이상
-        if(GameManager.instance.isPaint == 1 && !isTouch)
-        {
-            isTouch = true;
-            Debug.Log("성공");
-            Invoke("showTrash", 3f);
-        }
-        // 2초 이하
-        else if (GameManager.instance.isPaint == 2 && !isTouch)
-        {
-            isTouch = true;
-            GameManager.instance.hpDown();
-            Debug.Log("오염물질 분출");
-            Invoke("showTrash", 3f);
-        }
-    }*/
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!GameManager.instance.isGrab) return;
-        if (isTouch) return;
+        if(collision.gameObject.tag == "knife")
+        {
+            if (!collision.gameObject.GetComponent<isGrabCtr>().isGrab) return;
+        }
 
-        if (collision.gameObject.tag == "knife")
+        if (collision.gameObject.tag == "knife" && !isTouch)
         {
             isTouch = true;
             Invoke("showTrash", 3f);
         }
     }
 
-    /*private void OnTriggerEnter(Collider collision)
+    /*private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "knife" && !isTouch)
+        if (other.gameObject.tag == "knife")
         {
-            isTouch = true;
-            cutObject.SetActive(true);
-            Invoke("showTrash", 3f);
+            isColliding = true;
+            elapsedTime = 0f;
+            collisionTime = Time.time;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (isColliding)
+        {
+            elapsedTime = Time.time - collisionTime;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (elapsedTime < safeTime)
+        {
+            Debug.Log("오염물질 분출");
+        }
+        else
+        {
+            Debug.Log("GOOOOOOOOOOOOOOOOOOOOOOOOOD");
         }
 
+        // 충돌이 끝날 때 상태 초기화
+        isColliding = false;
+        collisionTime = 0f;
+        elapsedTime = 0f;
     }*/
 }
