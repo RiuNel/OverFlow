@@ -62,9 +62,9 @@ public class GarbageCtr : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "knife")
+        if(!GameManager.instance.isGrab)
         {
-            if (!collision.gameObject.GetComponent<isGrabCtr>().isGrab) return;
+            return;
         }
 
         if (collision.gameObject.tag == "knife" && !isTouch)

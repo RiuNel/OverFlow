@@ -20,12 +20,12 @@ public class trashGoodOrBad : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("trash"))
+        isGrabCtr gc = other.gameObject.GetComponent<isGrabCtr>();
+        if (gc != null && !gc.isGrab)
         {
-            if (!other.gameObject.GetComponent<isGrabCtr>().isGrab) return;
+            return;
         }
-        else
-        //if (other.gameObject.layer != LayerMask.NameToLayer("trash"))
+        if (other.gameObject.layer != LayerMask.NameToLayer("trash"))
         {
             return;
         }

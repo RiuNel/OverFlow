@@ -28,6 +28,16 @@ public class GameManager : MonoBehaviour
     public GameObject finalresultUI;
     public int isPaint = 0;
 
+    public bool isGrab = false;
+    public void isGrabOn()
+    {
+        isGrab = true;
+    }
+    public void isGrabOff()
+    {
+        isGrab = false;
+    }
+
     public void hpDown()
     {
         hp--;
