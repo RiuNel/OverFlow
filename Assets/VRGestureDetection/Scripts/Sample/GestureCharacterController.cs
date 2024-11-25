@@ -327,7 +327,6 @@ namespace VRGestureDetection.Sample
             //reverse move
             AddGestureEvent("two hand throw overhand", TruckMoveGesture);
             AddGestureEvent("orb hands rotate", TruckMoveGesture);
-            AddGestureEvent("right hand circle", TruckMoveGesture);
 
             //left move
             AddGestureEvent("lasso left", TruckMoveGesture);
@@ -367,7 +366,7 @@ namespace VRGestureDetection.Sample
 
 
 
-            if (detectedGesture == "two hand throw overhand" || detectedGesture == "orb hands rotate" || detectedGesture == "right hand circle")
+            if (detectedGesture == "two hand throw overhand" || detectedGesture == "orb hands rotate")
             {
                 truck_move = true; //안전하게 이동
             }
