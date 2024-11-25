@@ -22,7 +22,7 @@ namespace Rito.TexturePainter
 
 
         // 충돌 시간 추적용 필드
-        private Dictionary<Collider, float> collisionTimeTracker = new Dictionary<Collider, float>();
+        //private Dictionary<Collider, float> collisionTimeTracker = new Dictionary<Collider, float>();
 
         private void Awake()
         {
@@ -84,6 +84,8 @@ namespace Rito.TexturePainter
 
         private void OnCollisionStay(Collision collision)
         {
+            if (!GameManager.instance.isGrab) return;
+
             // 충돌한 오브젝트에서 TexturePaintTarget 컴포넌트 검색
             if (collision.collider.TryGetComponent(out TexturePaintTarget paintTarget))
             {
@@ -103,13 +105,13 @@ namespace Rito.TexturePainter
             }
         }
 
-        private void OnCollisionExit(Collision collision)
+        /*private void OnCollisionExit(Collision collision)
         {
             if (collisionTimeTracker.ContainsKey(collision.collider))
             {
                 collisionTimeTracker.Remove(collision.collider);
             }
-        }
+        }*/
 
         // 브러시 색상 변경
         public void SetBrushColor(in Color color)

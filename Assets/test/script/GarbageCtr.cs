@@ -16,7 +16,7 @@ public class GarbageCtr : MonoBehaviour
 
     public bool isTouch = false;
 
-   private void OnEnable()
+    private void OnEnable()
     {
         //GameManager.instance.isPaint = 0;
         isTouch = false;
@@ -79,7 +79,10 @@ public class GarbageCtr : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "knife" && !isTouch)
+        if (!GameManager.instance.isGrab) return;
+        if (isTouch) return;
+
+        if (collision.gameObject.tag == "knife")
         {
             isTouch = true;
             Invoke("showTrash", 3f);
