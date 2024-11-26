@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
+using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    private Coroutine npcAnimationCoroutine;
     public enum LevelState { None, Level1, Level2, Level3 }
     public LevelState currentLevel = LevelState.None;
     private LevelState previousLevel = LevelState.None;
 
     public GameObject fadeScreen;
+    public GameObject npc;
+    public float Timer = 2.0f;
     public bool isTouchingTruck = false;
     private bool hasFadedOut = false;
     public GameObject[] level1Section;
@@ -64,10 +68,18 @@ public class LevelController : MonoBehaviour
         {
             case LevelState.Level1:
                 moveToStep.Level1Move(moveToStep.targetPositions[0], moveToStep.targetPositions[1]);
+                if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작
+                {
+                    npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("back"));
+                }
                 FinishFade(/*초넣기*/);
                 break;
             case LevelState.Level2:
                 moveToStep.Level2Move(moveToStep.targetPositions[2], moveToStep.targetPositions[3]);
+                if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작 문제가 많음 확실히
+                {
+                    npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("left"));
+                }
                 FinishFade(/*초넣기*/);
                 break;
             case LevelState.Level3:
@@ -86,7 +98,6 @@ public class LevelController : MonoBehaviour
                 InitializeTruckPosition();
                 moveToStep.stop = false;
                 narrationControl.level1_start_narration = true;
-
                 StartFade();
                 break;
             case LevelState.Level2:
@@ -182,6 +193,35 @@ public class LevelController : MonoBehaviour
                 currentLevel = LevelState.Level3;
                 break;
             case LevelState.Level3:
+                break;
+        }
+    }
+
+    private IEnumerator RepeatNpcChangeAnimation(string name)
+    {
+        while (true) // 무한 반복
+        {
+            // 원하는 애니메이션 변경 (예: back, right, left 중 하나 선택)
+            NpcChangeAnimation(name);
+
+            // 2초 대기
+            yield return new WaitForSeconds(Timer);
+        }
+    }
+
+    private void NpcChangeAnimation(string name)
+    {
+        // 애니메이션 변경
+        switch (name)
+        {
+            case "back":
+                npc.GetComponent<AniTestScript>().BackAnimation();
+                break;
+            case "right":
+                npc.GetComponent<AniTestScript>().RightAnimation();
+                break;
+            case "left":
+                npc.GetComponent<AniTestScript>().LeftAnimation();
                 break;
         }
     }

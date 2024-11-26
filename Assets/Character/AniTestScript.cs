@@ -15,28 +15,30 @@ public class AniTestScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            bool nowBack = _animator.GetBool("back");
-            _animator.SetBool("back", !nowBack);
-            _animator.SetBool("right", false);
-            _animator.SetBool("left", false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            bool nowRight = _animator.GetBool("right");
-            _animator.SetBool("right", !nowRight);
-            _animator.SetBool("back", false);
-            _animator.SetBool("left", false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            bool nowLeft = _animator.GetBool("left");
-            _animator.SetBool("left", !nowLeft);
-            _animator.SetBool("right", false);
-            _animator.SetBool("back", false);
-        }
     }
+
+    public void BackAnimation()
+    {
+        bool nowBack = _animator.GetBool("back");
+        _animator.SetBool("back", !nowBack);
+        _animator.SetBool("right", false);
+        _animator.SetBool("left", false);
+    }
+
+    public void RightAnimation()
+    {
+        bool nowRight = _animator.GetBool("right");
+        _animator.SetBool("right", !nowRight);
+        _animator.SetBool("back", false);
+        _animator.SetBool("left", false);
+    }
+
+    public void LeftAnimation()
+    {
+        bool nowLeft = _animator.GetBool("left");
+        _animator.SetBool("left", !nowLeft);
+        _animator.SetBool("right", false);
+        _animator.SetBool("back", false);
+    }
+
 }
