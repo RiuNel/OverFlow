@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6904203e9670b9e40baab1ca935e8033,
         type: 3}
       propertyPath: m_Name
-      value: VRbody
+      value: Ch17_nonPBR@Breathing Idle
       objectReference: {fileID: 0}
     - target: {fileID: 6405828690065907157, guid: 6904203e9670b9e40baab1ca935e8033,
         type: 3}

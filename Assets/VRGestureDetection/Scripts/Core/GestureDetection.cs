@@ -271,11 +271,16 @@ namespace VRGestureDetection.Core
 
             if (gestureImage != null)
             {
+                // Tensor를 using 블록으로 관리하여 리소스를 안전하게 해제
                 using (Tensor tensorInput = ConvertTextureToTensor(gestureImage))
                 {
                     _worker.Execute(tensorInput);
-                    var output = _worker.PeekOutput();
-                    ProcessOutput(output);
+
+                    // Output Tensor를 using 블록으로 관리
+                    using (Tensor output = _worker.PeekOutput())
+                    {
+                        ProcessOutput(output);
+                    }
                 }
             }
         }
@@ -496,6 +501,16 @@ namespace VRGestureDetection.Core
         public void SetEnableDetection(bool enable)
         {
             enableDetection = enable;
+        }
+
+        private void OnDestroy()
+        {
+            // IWorker 리소스를 명시적으로 해제
+            if (_worker != null)
+            {
+                _worker.Dispose();
+                _worker = null;
+            }
         }
     }
 }
