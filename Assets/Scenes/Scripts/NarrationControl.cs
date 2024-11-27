@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NarrationControl : MonoBehaviour
@@ -14,6 +15,7 @@ public class NarrationControl : MonoBehaviour
     public bool isNarrationPlaying = false; // 내레이션이 진행 중인지 확인
 
     public GameObject Truck;
+    public List<AudioClip> audioClips;
 
     private bool hasTriggeredFinishNarration = false; // 중복 실행 방지
 
