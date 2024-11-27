@@ -293,6 +293,7 @@ namespace VRGestureDetection.Sample
         public CharacterController characterController;
         public AudioSource audioSource;
         public AudioClip runningSound, breastStrokeSound, underwaterSwimSound;
+        public GameObject levels;
 
         private Vector3 currentMovementDirection;
         public float currentSpeed = 0f;
@@ -351,7 +352,11 @@ namespace VRGestureDetection.Sample
             HandleRunningGesture(); 
             HandleMovement();
             UpdateFogSettings();*/
-            characterController.Move(currentMovementDirection * Time.deltaTime * currentSpeed);
+            if (!levels.GetComponent<NarrationControl>().isNarrationPlaying)
+            {
+                characterController.Move(currentMovementDirection * Time.deltaTime * currentSpeed);
+            }
+            
             TruckMoveGesture();
             Debug.Log(gestureDetection.GetCurrentGesture());
             testGesture = gestureDetection.GetCurrentGesture();      

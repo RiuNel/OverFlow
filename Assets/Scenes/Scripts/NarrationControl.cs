@@ -58,7 +58,7 @@ public class NarrationControl : MonoBehaviour
         {
             case var _ when level1_start_narration:
                 StartCoroutine(StartNarration("Level 1 Start Narration", 5f)); // 5초 내레이션
-                PlayAudio(0, 10);
+                PlayAudio(0, 0);
                 break;
             case var _ when level2_start_narration:
                 StartCoroutine(StartNarration("Level 2 Start Narration", 7f)); // 7초 내레이션
@@ -122,7 +122,7 @@ public class NarrationControl : MonoBehaviour
     void PlayAudio(int min, int max)
     {
         currentClipIndex = min;
-        if (currentClipIndex < max)
+        if (currentClipIndex <= max)
         {
             // 현재 인덱스의 오디오 클립 설정 및 재생
             audioSource.clip = audioClips[currentClipIndex];
