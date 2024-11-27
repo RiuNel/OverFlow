@@ -15,9 +15,20 @@ public class NarrationControl : MonoBehaviour
     public bool isNarrationPlaying = false; // 내레이션이 진행 중인지 확인
 
     public GameObject Truck;
+    public GameObject Radio;
+
+    private AudioSource audioSource;
+
     public List<AudioClip> audioClips;
 
+    private int currentClipIndex = 0;
+
     private bool hasTriggeredFinishNarration = false; // 중복 실행 방지
+
+    private void Start()
+    {
+        audioSource = Radio.GetComponent<AudioSource>();
+    }
 
     void Update()
     {
@@ -47,6 +58,7 @@ public class NarrationControl : MonoBehaviour
         {
             case var _ when level1_start_narration:
                 StartCoroutine(StartNarration("Level 1 Start Narration", 5f)); // 5초 내레이션
+                PlayAudio(0, 10);
                 break;
             case var _ when level2_start_narration:
                 StartCoroutine(StartNarration("Level 2 Start Narration", 7f)); // 7초 내레이션
@@ -105,5 +117,31 @@ public class NarrationControl : MonoBehaviour
 
         isNarrationPlaying = false; // 내레이션 상태 초기화
         hasTriggeredFinishNarration = false; // 종료 내레이션 트리거 초기화
+    }
+
+    void PlayAudio(int min, int max)
+    {
+        currentClipIndex = min;
+        if (currentClipIndex < max)
+        {
+            // 현재 인덱스의 오디오 클립 설정 및 재생
+            audioSource.clip = audioClips[currentClipIndex];
+            audioSource.Play();
+
+            // 클립이 끝나면 다음 클립으로 넘어가기
+            StartCoroutine(WaitForAudioToEnd(min, max));
+        }
+    }
+
+    IEnumerator WaitForAudioToEnd(int min, int max)
+    {
+        // 현재 클립의 길이만큼 대기
+        yield return new WaitForSeconds(audioSource.clip.length);
+
+        // 다음 클립으로 인덱스 증가
+        currentClipIndex++;
+        min = currentClipIndex;
+        // 다음 오디오 클립 재생
+        PlayAudio(min, max);
     }
 }

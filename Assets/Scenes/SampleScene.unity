@@ -914,7 +914,7 @@ PrefabInstance:
     - target: {fileID: 2740172085151982158, guid: 50f93ea889f7047488f1bf3e02e9412c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2740172085151982158, guid: 50f93ea889f7047488f1bf3e02e9412c,
         type: 3}
@@ -1736,7 +1736,7 @@ Transform:
   m_GameObject: {fileID: 1482747347}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.581821, y: 2.5068188, z: -6.7653947}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1793,6 +1793,7 @@ MonoBehaviour:
   level3_finish_narration: 0
   isNarrationPlaying: 0
   Truck: {fileID: 947485462}
+  Radio: {fileID: 1840547101}
   audioClips:
   - {fileID: 8300000, guid: 64a0895af55b3314ebd2120114e35cac, type: 3}
   - {fileID: 8300000, guid: 8fcd78c8802dc104e9819bf58d04f6b8, type: 3}
