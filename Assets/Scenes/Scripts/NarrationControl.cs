@@ -8,7 +8,9 @@ public class NarrationControl : MonoBehaviour
     public bool level1_start_narration = false;
     public bool level1_stop_narration = false;
     public bool level2_start_narration = false;
-    public bool level3_start_narration = false;
+    public bool level2_stop_narration = false;
+    public bool level3_start_narration = false; 
+    public bool level3_stop_narration = false;
 
     // 내레이션 종료 상태 플래그
     public bool level1_finish_narration = false;
@@ -83,22 +85,33 @@ public class NarrationControl : MonoBehaviour
         {
             PlayAudio(0, 0); // audioClips의 0번 인덱스 클립 재생
         }
-        if (level1_stop_narration)
+        if (level2_start_narration)
         {
-            PlayAudio(1, 1);
-        }
-        else if (level2_start_narration)
-        {
-            StartCoroutine(StartNarration("Level 2 Start Narration", 7f));
+            PlayAudio(3, 3);
         }
         else if (level3_start_narration)
         {
-            StartCoroutine(StartNarration("Level 3 Start Narration", 10f));
+        }
+        else if (level1_stop_narration)
+        {
+            PlayAudio(1, 1);
+        }
+        else if (level2_stop_narration)
+        {
+            PlayAudio(4, 4);
+        }
+        else if (level3_stop_narration)
+        {
+            PlayAudio(1, 1);
         }
         else
         {
             Debug.Log("내레이션 시작 플래그가 설정되지 않았습니다.");
         }
+        
+
+
+        
     }
 
     // 내레이션 종료를 트리거
@@ -107,36 +120,21 @@ public class NarrationControl : MonoBehaviour
         // 내레이션이 진행 중이면 실행하지 않음
         if (isNarrationPlaying) return;
 
-        // 내레이션 종료 플래그에 따라 적절한 내레이션 실행
         if (level1_finish_narration)
         {
-            StartCoroutine(StartNarration("Level 1 Finish Narration", 4f));
+            PlayAudio(2, 2);
         }
         else if (level2_finish_narration)
         {
-            StartCoroutine(StartNarration("Level 2 Finish Narration", 6f));
+
         }
         else if (level3_finish_narration)
         {
-            StartCoroutine(StartNarration("Level 3 Finish Narration", 8f));
         }
         else
         {
             Debug.Log("내레이션 종료 플래그가 설정되지 않았습니다.");
         }
-    }
-
-    // 내레이션을 실행하고 특정 시간 이후 종료
-    private IEnumerator StartNarration(string narrationMessage, float duration)
-    {
-        Debug.Log($"내레이션 시작: {narrationMessage}");
-        isNarrationPlaying = true;
-
-        // 지정된 시간 동안 대기
-        yield return new WaitForSeconds(duration);
-
-        Debug.Log($"내레이션 종료: {narrationMessage}");
-        ResetAllNarration(); // 모든 내레이션 플래그 초기화
     }
 
     // 모든 내레이션 상태와 플래그를 초기화

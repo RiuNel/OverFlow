@@ -1574,7 +1574,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1362099578
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1793,7 +1793,9 @@ MonoBehaviour:
   level1_start_narration: 0
   level1_stop_narration: 0
   level2_start_narration: 0
+  level2_stop_narration: 0
   level3_start_narration: 0
+  level3_stop_narration: 0
   level1_finish_narration: 0
   level2_finish_narration: 0
   level3_finish_narration: 0
@@ -1803,6 +1805,10 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: 5cb47cffc019e224395ba4c5fb3e4873, type: 3}
   - {fileID: 8300000, guid: 87093fb1faa05dc4bacb12b993baf6fe, type: 3}
+  - {fileID: 8300000, guid: df9edab40a0b4734b99febe82dfeb0b2, type: 3}
+  - {fileID: 8300000, guid: 8c909f193aff4ef4c82f505c44bda059, type: 3}
+  - {fileID: 8300000, guid: 13624402e0663f148b31e94927ab1ffb, type: 3}
+  - {fileID: 8300000, guid: 36fd366d53c65004aa1e93ede95a1abb, type: 3}
 --- !u!1 &1583458737 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1019262341059822, guid: 47eef07dd4fd09f47bd00b49fb392198,
@@ -2041,7 +2047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1833219761
 Transform:
   m_ObjectHideFlags: 0
