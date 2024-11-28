@@ -8,3 +8,10 @@ NativeFormatImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 184498
+  packageName: Rear Loader Garbage Truck
+  packageVersion: 1.0
+  assetPath: Assets/Rescue3DAssets/GarbageTruck_02/Materials/GarbageTruck_Wheels.mat
+  uploadId: 409839
