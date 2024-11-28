@@ -24,6 +24,8 @@ public class LevelController : MonoBehaviour
     //테스트 변수
     public bool levelChange = false;
 
+    private bool hasUpdated = false;
+
     private readonly Vector3 initialTruckPosition = new Vector3(0, 0, 1); // 트럭의 초기 위치
 
 
@@ -68,6 +70,11 @@ public class LevelController : MonoBehaviour
         {
             case LevelState.Level1:
                 moveToStep.Level1Move(moveToStep.targetPositions[0], moveToStep.targetPositions[1]);
+                if (moveToStep.stop)
+                {
+                    RunOnce(ref narrationControl.level1_stop_narration);
+                }
+                
                 if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작
                 {
                     npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("back"));
@@ -223,6 +230,14 @@ public class LevelController : MonoBehaviour
             case "left":
                 npc.GetComponent<AniTestScript>().LeftAnimation();
                 break;
+        }
+    }
+    void RunOnce(ref bool name)
+    {
+        if (!hasUpdated)
+        {
+            name = true;
+            hasUpdated = true; // 플래그 설정
         }
     }
 }
