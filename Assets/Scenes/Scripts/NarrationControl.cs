@@ -83,26 +83,27 @@ public class NarrationControl : MonoBehaviour
         // 내레이션 시작 플래그에 따라 적절한 내레이션 실행
         if (level1_start_narration)
         {
-            PlayAudio(0, 0); // audioClips의 0번 인덱스 클립 재생
+            PlayAudio(0); // audioClips의 0번 인덱스 클립 재생
         }
         if (level2_start_narration)
         {
-            PlayAudio(3, 3);
+            PlayAudio(3);
         }
         else if (level3_start_narration)
         {
+            PlayAudio(6);
         }
         else if (level1_stop_narration)
         {
-            PlayAudio(1, 1);
+            PlayAudio(1);
         }
         else if (level2_stop_narration)
         {
-            PlayAudio(4, 4);
+            PlayAudio(4);
         }
         else if (level3_stop_narration)
         {
-            PlayAudio(1, 1);
+            PlayAudio(1);
         }
         else
         {
@@ -122,14 +123,16 @@ public class NarrationControl : MonoBehaviour
 
         if (level1_finish_narration)
         {
-            PlayAudio(2, 2);
+            PlayAudio(2);
         }
         else if (level2_finish_narration)
         {
-
+            PlayAudio(5);
+            PlayAudio(6);
         }
         else if (level3_finish_narration)
         {
+            PlayAudio(8);
         }
         else
         {
@@ -175,6 +178,14 @@ public class NarrationControl : MonoBehaviour
         StartCoroutine(WaitForAudioToEnd(min, max));
     }
 
+    void PlayAudio(int i)
+    {
+        isNarrationPlaying = true;
+        audioSource.clip = audioClips[i];
+        audioSource.Play();
+        StartCoroutine(WaitForAudio());
+    }
+
     // 현재 오디오 클립이 끝난 후 다음 클립으로 넘어감
     IEnumerator WaitForAudioToEnd(int min, int max)
     {
@@ -194,5 +205,11 @@ public class NarrationControl : MonoBehaviour
             isNarrationPlaying = false;
             ResetAllNarration(); // 모든 내레이션 플래그 초기화
         }
+    }
+    IEnumerator WaitForAudio()
+    {
+        yield return new WaitForSeconds(audioSource.clip.length);
+        isNarrationPlaying = false;
+        ResetAllNarration(); // 모든 내레이션 플래그 초기화
     }
 }
