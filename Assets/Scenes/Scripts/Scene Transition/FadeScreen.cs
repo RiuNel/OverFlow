@@ -50,10 +50,4 @@ public class FadeScreen : MonoBehaviour
         newColor2.a = alphaOut;
         rend.material.SetColor("_Color", newColor2);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
