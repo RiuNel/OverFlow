@@ -31,6 +31,8 @@ public class GarbageCtr : MonoBehaviour
 
     void showTrash()
     {
+        if(!GameManager.instance.cutOnce) { GameManager.instance.cutOnce = true; }
+
         for (int i = 0; i < trashPos.Length; i++) //쓰레기 3개 추첨
         {
             do
@@ -56,6 +58,7 @@ public class GarbageCtr : MonoBehaviour
             trash[r[i]].SetActive(true);
         }
 
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_garbageDisable);
         first.SetActive(false);
     }
 
