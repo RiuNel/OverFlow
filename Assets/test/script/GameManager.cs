@@ -6,7 +6,6 @@ using static UnityEngine.ParticleSystem;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
     void Awake()
     {
         if (instance == null)
@@ -17,6 +16,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        isDone = 0;
     }
 
     public const int num = 3;
@@ -28,7 +29,14 @@ public class GameManager : MonoBehaviour
     public GameObject finalresultUI;
     public int isPaint = 0;
 
+    public int isDone = 0;
+
+    public bool isStart = false;
     public bool isGrab = false;
+    public bool cutOnce = false;
+
+    public GameObject hint;
+
     public void isGrabOn()
     {
         isGrab = true;
@@ -52,5 +60,10 @@ public class GameManager : MonoBehaviour
         {
             hpImage[i].SetActive(true);
         }
+    }
+
+    public void HintOpen()
+    {
+        hint.SetActive(true);
     }
 }
