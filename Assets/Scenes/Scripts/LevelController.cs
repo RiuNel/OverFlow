@@ -33,7 +33,6 @@ public class LevelController : MonoBehaviour
     void Start()
     {
         HideAllLevels();
-        //gameObject.GetComponent<NarrationControl>().start_narration = true;
         ChangeLevel(LevelState.Level1);
     }
 
@@ -51,8 +50,6 @@ public class LevelController : MonoBehaviour
             ChangeLevel(LevelState.Level3);
             levelChange = false;
         }
-
-
         var moveToStep = Truck.GetComponent<MoveToStep>(); //트럭 안에 있는 스크립트 훔쳐오기
         var narrationControl = gameObject.GetComponent<NarrationControl>(); //나레이션 컨트롤 스크립트 가져오기
 
@@ -227,9 +224,7 @@ public class LevelController : MonoBehaviour
     }
     private void StartFade(float fadeDuration = 2f)
     {
-
         fadeScreen.GetComponent<FadeScreen>().FadeIn(fadeDuration);
-
     }
     public void ChangeLevel(LevelState newLevel)
     {
@@ -274,9 +269,7 @@ public class LevelController : MonoBehaviour
                 case LevelState.Level1:
                     if (stopName == "stop")
                     gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Stop;
-                   
                     break;
-
                 case LevelState.Level2:
                     if (stopName == "stop")
                         gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level2Stop;
@@ -304,7 +297,6 @@ public class LevelController : MonoBehaviour
                     if (stopName == "finishStop")
                     {
                         gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Finish;
-                        Debug.Log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
                     }
 
                     break;
