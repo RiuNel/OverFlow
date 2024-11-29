@@ -94,6 +94,7 @@ public class MoveToStep : MonoBehaviour
         
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //¸¶¹«¸®
         {
+            Levels.GetComponent<NarrationControl>().ResetAllNarration();
             Levels.GetComponent<NarrationControl>().level2_finish_narration = true;
             finishStop = true;
         } 

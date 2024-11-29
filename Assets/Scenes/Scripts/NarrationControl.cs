@@ -141,7 +141,7 @@ public class NarrationControl : MonoBehaviour
     }
 
     // 모든 내레이션 상태와 플래그를 초기화
-    private void ResetAllNarration()
+    public void ResetAllNarration()
     {
         // 시작 플래그 초기화
         level1_start_narration = false;
