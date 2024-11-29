@@ -2,23 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 내레이션 상태를 나타내는 열거형(enum)
+public enum NarrationState
+{
+    None,
+    Level1Start,
+    Level1Stop,
+    Level2Start,
+    Level2Stop,
+    Level3Start,
+    Level3Stop,
+    Level1Finish,
+    Level2Finish,
+    Level3Finish
+}
+
 public class NarrationControl : MonoBehaviour
 {
-    // 내레이션 시작 상태 플래그
-    public bool level1_start_narration = false;
-    public bool level1_stop_narration = false;
-    public bool level2_start_narration = false;
-    public bool level2_stop_narration = false;
-    public bool level3_start_narration = false; 
-    public bool level3_stop_narration = false;
-
-    // 내레이션 종료 상태 플래그
-    public bool level1_finish_narration = false;
-    public bool level2_finish_narration = false;
-    public bool level3_finish_narration = false;
-
-    // 내레이션이 현재 진행 중인지 여부
-    public bool isNarrationPlaying = false;
+    // 내레이션 상태 플래그
+    public NarrationState currentNarrationState = NarrationState.None;
 
     // 내레이션 상태와 관련된 오브젝트들
     public GameObject Truck; // MoveToStep 컴포넌트를 포함하는 오브젝트
@@ -28,6 +30,7 @@ public class NarrationControl : MonoBehaviour
     public List<AudioClip> audioClips; // 재생할 오디오 클립 리스트
 
     private int currentClipIndex = 0; // 현재 재생 중인 클립의 인덱스
+    public bool isNarrationPlaying = false; // 내레이션 진행 상태
     private bool hasTriggeredFinishNarration = false; // 종료 내레이션 중복 실행 방지
 
     private void Start()
@@ -63,13 +66,8 @@ public class NarrationControl : MonoBehaviour
             return;
         }
 
-        // 종료 내레이션 트리거: finishStop 상태가 true일 때 실행
-        if (moveToStep.finishStop && !hasTriggeredFinishNarration)
-        {
-            TriggerFinishNarration(); // 종료 내레이션 실행
-            hasTriggeredFinishNarration = true; // 중복 실행 방지
-        }
 
+        //TriggerFinishNarration();
         // 시작 내레이션 트리거
         CheckStartNarration();
     }
@@ -80,136 +78,107 @@ public class NarrationControl : MonoBehaviour
         // 현재 내레이션이 진행 중이면 실행하지 않음
         if (isNarrationPlaying) return;
 
-        // 내레이션 시작 플래그에 따라 적절한 내레이션 실행
-        if (level1_start_narration)
+        switch (currentNarrationState)
         {
-            PlayAudio(0); // audioClips의 0번 인덱스 클립 재생
+            case NarrationState.Level1Start:
+                PlayAudio(0); // audioClips의 0번 인덱스 클립 재생
+                break;
+            case NarrationState.Level2Start:
+                PlayAudio(3);
+                break;
+            case NarrationState.Level3Start:
+                PlayAudio(9, 6, 10);
+                break;
+            case NarrationState.Level1Stop:
+                PlayAudio(1);
+                break;
+            case NarrationState.Level2Stop:
+                PlayAudio(4);
+                break;
+            case NarrationState.Level3Stop:
+                PlayAudio(7);
+                break;
+            case NarrationState.Level1Finish:
+                PlayAudio(2);
+                break;
+            case NarrationState.Level2Finish:
+                PlayAudio(5);
+                break;
+            case NarrationState.Level3Finish:
+                PlayAudio(8);
+                break;
+            default:
+                Debug.Log("내레이션 시작 상태가 설정되지 않았습니다.");
+                break;
         }
-        if (level2_start_narration)
-        {
-            PlayAudio(3);
-        }
-        else if (level3_start_narration)
-        {
-            PlayAudio(6);
-        }
-        else if (level1_stop_narration)
-        {
-            PlayAudio(1);
-        }
-        else if (level2_stop_narration)
-        {
-            PlayAudio(4);
-        }
-        else if (level3_stop_narration)
-        {
-            PlayAudio(1);
-        }
-        else
-        {
-            Debug.Log("내레이션 시작 플래그가 설정되지 않았습니다.");
-        }
-        
-
-
-        
     }
 
     // 내레이션 종료를 트리거
-    private void TriggerFinishNarration()
-    {
-        // 내레이션이 진행 중이면 실행하지 않음
-        if (isNarrationPlaying) return;
+    //private void TriggerFinishNarration()
+    //{
+    //    // 내레이션이 진행 중이면 실행하지 않음
+    //    if (isNarrationPlaying) return;
 
-        if (level1_finish_narration)
-        {
-            PlayAudio(2);
-        }
-        else if (level2_finish_narration)
-        {
-            PlayAudio(5);
-            PlayAudio(6);
-        }
-        else if (level3_finish_narration)
-        {
-            PlayAudio(8);
-        }
-        else
-        {
-            Debug.Log("내레이션 종료 플래그가 설정되지 않았습니다.");
-        }
-    }
+    //    switch (currentNarrationState)
+    //    {
+
+    //        default:
+    //            Debug.Log("내레이션 종료 상태가 설정되지 않았습니다.");
+    //            break;
+    //    }
+
+    //    currentNarrationState = NarrationState.None; // 상태 초기화
+    //}
 
     // 모든 내레이션 상태와 플래그를 초기화
     public void ResetAllNarration()
     {
-        // 시작 플래그 초기화
-        level1_start_narration = false;
-        level1_stop_narration = false;
-        level2_start_narration = false;
-        level3_start_narration = false;
-
-        // 종료 플래그 초기화
-        level1_finish_narration = false;
-        level2_finish_narration = false;
-        level3_finish_narration = false;
-
-        isNarrationPlaying = false; // 내레이션 상태 초기화
+        currentNarrationState = NarrationState.None; // 내레이션 상태 초기화
+        isNarrationPlaying = false; // 내레이션 진행 상태 초기화
         hasTriggeredFinishNarration = false; // 종료 내레이션 중복 방지 플래그 초기화
     }
 
-    // 지정된 범위의 오디오 클립을 재생
-    void PlayAudio(int min, int max)
-    {
-        isNarrationPlaying = true;
-        // audioClips 및 범위 유효성 검사
-        if (audioClips == null || audioClips.Count == 0 || min < 0 || max >= audioClips.Count)
-        {
-            Debug.LogWarning("오디오 클립 리스트가 비어 있거나 인덱스 범위가 잘못되었습니다.");
-            return;
-        }
-
-        // 현재 클립 인덱스 설정
-        currentClipIndex = min;
-        audioSource.clip = audioClips[currentClipIndex];
-        audioSource.Play();
-
-        // 현재 클립이 끝나면 다음 클립 재생
-        StartCoroutine(WaitForAudioToEnd(min, max));
-    }
-
+    // 지정된 오디오 클립을 재생
     void PlayAudio(int i)
     {
-        isNarrationPlaying = true;
+        isNarrationPlaying = true; //중복 실행 방지 변수
         audioSource.clip = audioClips[i];
         audioSource.Play();
         StartCoroutine(WaitForAudio());
+        Debug.Log("PlayAudio 실행");
     }
 
-    // 현재 오디오 클립이 끝난 후 다음 클립으로 넘어감
-    IEnumerator WaitForAudioToEnd(int min, int max)
+    void PlayAudio(int i, int j, int k)
     {
-        // 현재 클립의 길이만큼 대기
-        yield return new WaitForSeconds(audioSource.clip.length);
-
-        // 다음 클립으로 이동
-        currentClipIndex++;
-        
-        if (currentClipIndex <= max)
-        {
-            PlayAudio(currentClipIndex, max); // 재귀 호출로 다음 클립 재생
-        }
-        else
-        {
-            Debug.Log("끝 나레이션");
-            isNarrationPlaying = false;
-            ResetAllNarration(); // 모든 내레이션 플래그 초기화
-        }
+        isNarrationPlaying = true; // 중복 실행 방지 변수
+        StartCoroutine(PlaySequentialAudio(new int[] { i, j, k }));
     }
+
+    // 순차적으로 오디오를 재생하는 코루틴
+    IEnumerator PlaySequentialAudio(int[] clipIndices)
+    {
+        foreach (int index in clipIndices)
+        {
+            // 현재 오디오 클립 설정 및 재생
+            audioSource.clip = audioClips[index];
+            audioSource.Play();
+
+            // 현재 오디오가 끝날 때까지 대기
+            yield return new WaitForSeconds(audioSource.clip.length);
+        }
+
+        ResetAllNarration(); // 모든 내레이션 플래그 초기화
+        isNarrationPlaying = false; // 실행 상태 초기화
+        Debug.Log("모든 오디오 재생 완료");
+    }
+
+    // 현재 오디오 클립이 끝난 후 내레이션 상태 초기화
     IEnumerator WaitForAudio()
     {
         yield return new WaitForSeconds(audioSource.clip.length);
-        isNarrationPlaying = false;
+        //isNarrationPlaying = false;
         ResetAllNarration(); // 모든 내레이션 플래그 초기화
+        Debug.Log("WaitForAudio 실행");
     }
+    
 }

@@ -14,6 +14,7 @@ public class MoveToStep : MonoBehaviour
     public float truckSpeed = 1f;
     public float positionThreshold = 0.1f; // 목표 지점 도달 거리 임계값
 
+   
     public bool stop = false;
     public bool finishStop = false;
 
@@ -68,7 +69,6 @@ public class MoveToStep : MonoBehaviour
 
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //마무리
         {
-            Levels.GetComponent<NarrationControl>().level1_finish_narration = true;
             finishStop = true;
             Debug.Log("도착지에 도착");
         }
@@ -94,9 +94,8 @@ public class MoveToStep : MonoBehaviour
         
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //마무리
         {
-            Levels.GetComponent<NarrationControl>().ResetAllNarration();
-            Levels.GetComponent<NarrationControl>().level2_finish_narration = true;
             finishStop = true;
+            Debug.Log("도착지에 도착");
         } 
         
     }
@@ -123,8 +122,8 @@ public class MoveToStep : MonoBehaviour
 
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //마무리
         {
-            Levels.GetComponent<NarrationControl>().level3_finish_narration = true;
             finishStop = true;
+            Debug.Log("도착지에 도착");
         }
 
     }

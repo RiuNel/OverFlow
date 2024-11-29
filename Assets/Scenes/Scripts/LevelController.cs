@@ -24,7 +24,8 @@ public class LevelController : MonoBehaviour
     //테스트 변수
     public bool levelChange = false;
 
-    private bool hasUpdated = false;
+    public bool hasUpdated = false;
+    public bool hasUpdated2 = false;
 
     private readonly Vector3 initialTruckPosition = new Vector3(0, 0, 1); // 트럭의 초기 위치
 
@@ -42,6 +43,7 @@ public class LevelController : MonoBehaviour
         if (levelChange && currentLevel == LevelState.Level1)
         {
             ChangeLevel(LevelState.Level2);
+            Debug.Log("레벨체인지");
             levelChange = false;
         }
         if (levelChange && currentLevel == LevelState.Level2)
@@ -72,7 +74,11 @@ public class LevelController : MonoBehaviour
                 moveToStep.Level1Move(moveToStep.targetPositions[0], moveToStep.targetPositions[1]);
                 if (moveToStep.stop)
                 {
-                    RunOnce(ref narrationControl.level1_stop_narration);
+                    RunOnce("stop");
+                }
+                if (moveToStep.finishStop)
+                {
+                    RunOnce2("finishStop");
                 }
                 
                 if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작
@@ -83,6 +89,14 @@ public class LevelController : MonoBehaviour
                 break;
             case LevelState.Level2:
                 moveToStep.Level2Move(moveToStep.targetPositions[2], moveToStep.targetPositions[3]);
+                if (moveToStep.stop)
+                {
+                    RunOnce("stop");
+                }
+                if (moveToStep.finishStop)
+                {
+                    RunOnce2("finishStop");
+                }
                 if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작 문제가 많음 확실히
                 {
                     npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("left"));
@@ -91,6 +105,14 @@ public class LevelController : MonoBehaviour
                 break;
             case LevelState.Level3:
                 moveToStep.Level3Move(moveToStep.targetPositions[4], moveToStep.targetPositions[5]);
+                if (moveToStep.stop)
+                {
+                    RunOnce("stop");
+                }
+                if (moveToStep.finishStop)
+                {
+                    RunOnce2("finishStop");
+                }
                 FinishFade(/*초넣기*/);
                 break;
         }
@@ -104,21 +126,30 @@ public class LevelController : MonoBehaviour
                 ShowLevel(level1Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
-                narrationControl.level1_start_narration = true;
+                moveToStep.finishStop = false;
+                hasUpdated = false;
+                hasUpdated2 = false;
+                narrationControl.currentNarrationState = NarrationState.Level1Start;
                 StartFade();
                 break;
             case LevelState.Level2:
                 ShowLevel(level2Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
-                narrationControl.level2_start_narration = true;
+                moveToStep.finishStop = false;
+                hasUpdated = false;
+                hasUpdated2 = false;
+                narrationControl.currentNarrationState = NarrationState.Level2Start;
                 StartFade();
                 break;
             case LevelState.Level3:
                 ShowLevel(level3Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
-                narrationControl.level3_start_narration = true;
+                moveToStep.finishStop = false;
+                hasUpdated = false;
+                hasUpdated2 = false;
+                narrationControl.currentNarrationState = NarrationState.Level3Start;
                 StartFade();
                 break;
             default:
@@ -171,22 +202,13 @@ public class LevelController : MonoBehaviour
             fadeScreen.GetComponent<FadeScreen>().FadeOut(fadeDuration);
             hasFadedOut = true; // 한 번 실행했음을 기록
             StartCoroutine(ChangeNextLevel());
+            Debug.Log("코루틴 호출됨");
         }
-    }
-
-    private void StartFade(float fadeDuration = 2f)
-    {
-
-        fadeScreen.GetComponent<FadeScreen>().FadeIn(fadeDuration);
-
-    }
-    public void ChangeLevel(LevelState newLevel)
-    {
-        currentLevel = newLevel;
     }
     IEnumerator ChangeNextLevel()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
+        Debug.Log("왜 실행 됌?");
         hasFadedOut = false;
         switch (currentLevel)
         {
@@ -203,6 +225,17 @@ public class LevelController : MonoBehaviour
                 break;
         }
     }
+    private void StartFade(float fadeDuration = 2f)
+    {
+
+        fadeScreen.GetComponent<FadeScreen>().FadeIn(fadeDuration);
+
+    }
+    public void ChangeLevel(LevelState newLevel)
+    {
+        currentLevel = newLevel;
+    }
+    
 
     private IEnumerator RepeatNpcChangeAnimation(string name)
     {
@@ -232,12 +265,68 @@ public class LevelController : MonoBehaviour
                 break;
         }
     }
-    void RunOnce(ref bool name)
+    void RunOnce(string stopName)
     {
         if (!hasUpdated)
         {
-            name = true;
+            switch (currentLevel)
+            {
+                case LevelState.Level1:
+                    if (stopName == "stop")
+                    gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Stop;
+                   
+                    break;
+
+                case LevelState.Level2:
+                    if (stopName == "stop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level2Stop;
+                    break;
+
+                case LevelState.Level3:
+                    if (stopName == "stop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level3Stop;
+                    break ;
+                default:
+                    Debug.LogWarning("알 수 없는 LevelState입니다.");
+                    break;
+            }
             hasUpdated = true; // 플래그 설정
+        }
+    }
+
+    void RunOnce2(string stopName)
+    {
+        if (!hasUpdated2)
+        {
+            switch (currentLevel)
+            {
+                case LevelState.Level1:
+                    if (stopName == "finishStop")
+                    {
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Finish;
+                        Debug.Log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+                    }
+
+                    break;
+
+                case LevelState.Level2:
+                    
+                    if (stopName == "finishStop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level2Finish;
+                    break;
+
+                case LevelState.Level3:
+      
+                    if (stopName == "finishStop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level3Finish;
+                    break;
+
+
+                default:
+                    Debug.LogWarning("알 수 없는 LevelState입니다.");
+                    break;
+            }
+            hasUpdated2 = true; // 플래그 설정
         }
     }
 }

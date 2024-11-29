@@ -1778,6 +1778,8 @@ MonoBehaviour:
   - {fileID: 1362099576}
   Truck: {fileID: 947485462}
   levelChange: 0
+  hasUpdated: 0
+  hasUpdated2: 0
 --- !u!114 &1482747350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1790,16 +1792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76bb0f539471b834bb967bd85ee890eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level1_start_narration: 0
-  level1_stop_narration: 0
-  level2_start_narration: 0
-  level2_stop_narration: 0
-  level3_start_narration: 0
-  level3_stop_narration: 0
-  level1_finish_narration: 0
-  level2_finish_narration: 0
-  level3_finish_narration: 0
-  isNarrationPlaying: 0
+  currentNarrationState: 0
   Truck: {fileID: 947485462}
   Radio: {fileID: 1840547101}
   audioClips:
@@ -1812,6 +1805,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 35ae34eaec7f76e4ebc4296b1544bd4f, type: 3}
   - {fileID: 8300000, guid: 5430b6b2919e5bf4d9d301ecbe1b4375, type: 3}
   - {fileID: 8300000, guid: dfef5033cb4a422449136f8c3fdded9b, type: 3}
+  - {fileID: 8300000, guid: f0ae6148c66cea3489d1742235ac68a5, type: 3}
+  - {fileID: 8300000, guid: c6bef834d66f81d43949b056cf1e21a3, type: 3}
+  isNarrationPlaying: 0
 --- !u!1 &1583458737 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1019262341059822, guid: 47eef07dd4fd09f47bd00b49fb392198,
