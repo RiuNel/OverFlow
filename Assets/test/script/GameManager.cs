@@ -32,9 +32,14 @@ public class GameManager : MonoBehaviour
     public int isDone = 0;
 
     public bool isStart = false;
+    public bool isFirst = false;
     public bool isGrab = false;
     public bool cutOnce = false;
 
+    public bool pollutionPlay = false;
+
+    public GameObject First;
+    public GameObject Second;
     public GameObject hint;
 
     public void isGrabOn()
@@ -62,8 +67,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void FirstOn()
+    {
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
+        First.SetActive(false);
+        Second.SetActive(true);
+    }
     public void HintOpen()
     {
         hint.SetActive(true);
     }
+
 }

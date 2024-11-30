@@ -31,7 +31,14 @@ public class GarbageCtr : MonoBehaviour
 
     void showTrash()
     {
-        if(!GameManager.instance.cutOnce) { GameManager.instance.cutOnce = true; }
+        if (!GameManager.instance.isFirst)
+        {
+            GameManager.instance.isFirst = true;
+            GameManager.instance.pollutionPlay = true;
+            return;
+        }
+
+        if (!GameManager.instance.cutOnce && GameManager.instance.isFirst) { GameManager.instance.cutOnce = true; }
 
         for (int i = 0; i < trashPos.Length; i++) //쓰레기 3개 추첨
         {
@@ -58,7 +65,7 @@ public class GarbageCtr : MonoBehaviour
             trash[r[i]].SetActive(true);
         }
 
-        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_garbageDisable);
+        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
         first.SetActive(false);
     }
 

@@ -73,6 +73,12 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioSource audioNarration;
     [SerializeField] AudioSource audioSfx;
 
+    // ESfx 열거형을 매개변수로 받아 해당하는 효과음 클립을 재생
+    public void PlaySFX(ESfx esfx)
+    {
+        audioSfx.PlayOneShot(sfxs[(int)esfx]);
+    }
+
     // ENarration 열거형을 매개변수로 받아 해당하는 나레이션 클립을 재생
     public void PlayNarrationE(ENarration narrationIdx)
     {
@@ -160,11 +166,7 @@ public class SoundManager : MonoBehaviour
         audioNarration.Stop();
     }
 
-    // ESfx 열거형을 매개변수로 받아 해당하는 효과음 클립을 재생
-    public void PlaySFX(ESfx esfx)
-    {
-        audioSfx.PlayOneShot(sfxs[(int)esfx]);
-    }
+    
 
     //
     public AudioClip[] startScenes;
@@ -178,17 +180,25 @@ public class SoundManager : MonoBehaviour
 
     //
 
-    private void Start()
+    private void OnEnable()
     {
         CEnd = true;
+        oneShotStart = false;
+        oneShot = false;
+        oneShotDone = false;
+        oneShotGarbageCut = false;
+        oneShotHint = false;
         //PlayNarrationB(startScenes);
     }
 
     public bool oneShotStart = false;
+    public bool oneShotFirst = false;
+    public bool oneshotFirstDone = false;
     public bool oneShot = false;
     public bool oneShotDone = false;
     public bool oneShotGarbageCut = false;
     public bool oneShotHint = false;
+
 
     private void Update()
     {
@@ -196,7 +206,19 @@ public class SoundManager : MonoBehaviour
         {
             PlayNarrationB(startScenes, ref oneShotStart);
         }
-        if (GameManager.instance.isGrab && !oneShot)
+
+        if (GameManager.instance.isFirst && !oneShotFirst)
+        {
+            PlayNarrationB(pollutant, ref oneShotFirst);
+        }
+
+        if (oneShotFirst && CEnd && !oneshotFirstDone)
+        {
+            oneshotFirstDone = true;
+            GameManager.instance.FirstOn();
+        }
+
+        if (GameManager.instance.isGrab && oneShotFirst && !oneShot)
         {
             PlayNarrationB(secondGarbage, ref oneShot);
         }
@@ -205,7 +227,7 @@ public class SoundManager : MonoBehaviour
         {
             PlayNarrationB(secondGarbageCut, ref oneShotGarbageCut);
         }
-        if (oneShotGarbageCut && SoundManager.instance.CEnd && !oneShotHint)
+        if (oneShotGarbageCut && CEnd && !oneShotHint)
         {
             GameManager.instance.HintOpen();
 
@@ -214,7 +236,7 @@ public class SoundManager : MonoBehaviour
 
         if (GameManager.instance.isDone >= 16 && !oneShotDone)
         {
-            PlayNarrationB(finishGroup,     ref oneShotDone);
+            PlayNarrationB(finishGroup, ref oneShotDone);
         }
     }
 
