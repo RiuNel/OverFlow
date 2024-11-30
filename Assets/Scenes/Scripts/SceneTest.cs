@@ -12,10 +12,19 @@ public class SceneTest : MonoBehaviour
         StartCoroutine(GoToScene());
     }
 
+    private void Update()
+    {
+        
+    }
+
     IEnumerator GoToScene()
     {
         yield return new WaitForSeconds(2.0f);
         if (SceneManager.GetActiveScene().buildIndex + 1 < SceneManager.sceneCountInBuildSettings)
             TransitionManager.GoToScreen(SceneManager.GetActiveScene().buildIndex + 1);
+        else
+        {
+            TransitionManager.GoToScreen(0);
+        }
     }
 }
