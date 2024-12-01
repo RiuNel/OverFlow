@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 public class GarbageCtr : MonoBehaviour
 {
+    public GameManager GameManager;
+    public SoundManager SoundManager;
+
     public GameObject[] trash;
     //public GameObject trashUI;
     public GameObject first;
@@ -31,14 +34,14 @@ public class GarbageCtr : MonoBehaviour
 
     void showTrash()
     {
-        if (!GameManager.instance.isFirst)
+        if (!GameManager.isFirst)
         {
-            GameManager.instance.isFirst = true;
-            GameManager.instance.pollutionPlay = true;
+            GameManager.isFirst = true;
+            GameManager.pollutionPlay = true;
             return;
         }
 
-        if (!GameManager.instance.cutOnce && GameManager.instance.isFirst) { GameManager.instance.cutOnce = true; }
+        if (!GameManager.cutOnce && GameManager.isFirst) { GameManager.cutOnce = true; }
 
         for (int i = 0; i < trashPos.Length; i++) //쓰레기 3개 추첨
         {
@@ -65,14 +68,14 @@ public class GarbageCtr : MonoBehaviour
             trash[r[i]].SetActive(true);
         }
 
-        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
+        SoundManager.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
         first.SetActive(false);
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(!GameManager.instance.isGrab)
+        if(!GameManager.isGrab)
         {
             return;
         }

@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class pollutantGarbage : MonoBehaviour
 {
+    public GameManager GameManager;
     public GameObject pollution;
     public GameObject pollutionImage;
 
@@ -41,7 +42,7 @@ public class pollutantGarbage : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.instance.pollutionPlay)
+        if (GameManager.pollutionPlay)
         {
             StartCoroutine(PollutionSequence());
         }

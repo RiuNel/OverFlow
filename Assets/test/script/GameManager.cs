@@ -5,18 +5,9 @@ using static UnityEngine.ParticleSystem;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
-    void Awake()
+    public SoundManager SoundManager;
+    void OnEnable()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
         isDone = 0;
     }
 
@@ -69,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void FirstOn()
     {
-        SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
+        SoundManager.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
         First.SetActive(false);
         Second.SetActive(true);
     }

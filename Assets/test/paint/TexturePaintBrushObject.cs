@@ -7,6 +7,7 @@ namespace Rito.TexturePainter
     [DisallowMultipleComponent]
     public class TexturePaintBrushObject : MonoBehaviour
     {
+        public GameManager GameManager;
         // Public Fields
         [Range(0.01f, 1f)] public float brushSize = 0.1f;
         public Texture2D brushTexture;
@@ -84,7 +85,7 @@ namespace Rito.TexturePainter
 
         private void OnCollisionStay(Collision collision)
         {
-            if (!GameManager.instance.isGrab)
+            if (!GameManager.isGrab)
             {
                 return;
             }

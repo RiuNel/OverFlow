@@ -1,24 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static SoundManager;
-using static Unity.Barracuda.TextureAsTensorData;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager instance;
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     //BGM Á¾·ùµé
     public enum ENarration
     {
@@ -180,7 +164,9 @@ public class SoundManager : MonoBehaviour
 
     //
 
-    private void OnEnable()
+    public GameManager GameManager;
+
+    private void Start()
     {
         CEnd = true;
         oneShotStart = false;
@@ -189,6 +175,8 @@ public class SoundManager : MonoBehaviour
         oneShotGarbageCut = false;
         oneShotHint = false;
         //PlayNarrationB(startScenes);
+
+        startNarration();
     }
 
     public bool oneShotStart = false;
@@ -199,15 +187,19 @@ public class SoundManager : MonoBehaviour
     public bool oneShotGarbageCut = false;
     public bool oneShotHint = false;
 
+    public void startNarration()
+    {
+        GameManager.isStart = true;
+    }
 
     private void Update()
     {
-        if (GameManager.instance.isStart && !oneShotStart)
+        if (GameManager.isStart && !oneShotStart)
         {
             PlayNarrationB(startScenes, ref oneShotStart);
         }
 
-        if (GameManager.instance.isFirst && !oneShotFirst)
+        if (GameManager.isFirst && !oneShotFirst)
         {
             PlayNarrationB(pollutant, ref oneShotFirst);
         }
@@ -215,26 +207,26 @@ public class SoundManager : MonoBehaviour
         if (oneShotFirst && CEnd && !oneshotFirstDone)
         {
             oneshotFirstDone = true;
-            GameManager.instance.FirstOn();
+            GameManager.FirstOn();
         }
 
-        if (GameManager.instance.isGrab && oneShotFirst && !oneShot)
+        if (GameManager.isGrab && oneShotFirst && !oneShot)
         {
             PlayNarrationB(secondGarbage, ref oneShot);
         }
 
-        if (GameManager.instance.cutOnce && !oneShotGarbageCut)
+        if (GameManager.cutOnce && !oneShotGarbageCut)
         {
             PlayNarrationB(secondGarbageCut, ref oneShotGarbageCut);
         }
         if (oneShotGarbageCut && CEnd && !oneShotHint)
         {
-            GameManager.instance.HintOpen();
+            GameManager.HintOpen();
 
             PlayNarrationB(showHint, ref oneShotHint);
         }
 
-        if (GameManager.instance.isDone >= 16 && !oneShotDone)
+        if (GameManager.isDone >= 16 && !oneShotDone)
         {
             PlayNarrationB(finishGroup, ref oneShotDone);
         }

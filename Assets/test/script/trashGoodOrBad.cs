@@ -5,10 +5,13 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class trashGoodOrBad : MonoBehaviour
 {
+    public GameManager GameManager;
+    public SoundManager SoundManager;
+
     public GameObject OX;
     private Color color;
 
-    private void Start()
+    private void OnEnable()
     {
         color = OX.GetComponent<SpriteRenderer>().color;
     }
@@ -33,20 +36,20 @@ public class trashGoodOrBad : MonoBehaviour
 
         if (other.gameObject.tag == this.tag)
         {
-            GameManager.instance.isDone++;
-            SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
+            GameManager.isDone++;
+            SoundManager.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
             OX.GetComponent<SpriteRenderer>().color = Color.red;
-            SoundManager.instance.PlayRandomNarration(SoundManager.instance.goodTrash);
+            SoundManager.PlayRandomNarration(SoundManager.goodTrash);
             Debug.Log("-----------------정답");
             Invoke("reMaterial", 1.0f);
             Destroy(other.gameObject);
         }
         else
         {
-            GameManager.instance.isDone++;
-            SoundManager.instance.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
+            GameManager.isDone++;
+            SoundManager.PlaySFX(SoundManager.ESfx.SFX_trashDisable);
             //OX.GetComponent<SpriteRenderer>().color = Color.black;
-            SoundManager.instance.PlayRandomNarration(SoundManager.instance.badTrash);
+            SoundManager.PlayRandomNarration(SoundManager.badTrash);
             Debug.Log("오답");
             //Invoke("reMaterial", 1.0f);
             Destroy(other.gameObject);
