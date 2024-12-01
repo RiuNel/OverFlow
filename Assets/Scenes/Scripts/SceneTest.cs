@@ -6,18 +6,22 @@ using UnityEngine.SceneManagement;
 public class SceneTest : MonoBehaviour
 {
     public SceneTransitionManager TransitionManager;
-
+    public bool is_next;    
+        
     private void Start()
     {
-        StartCoroutine(GoToScene());
+        is_next = false;
     }
 
     private void Update()
     {
-        
+        if (is_next)
+        {
+            StartCoroutine(GoToScene());
+        }
     }
 
-    IEnumerator GoToScene()
+    public IEnumerator GoToScene()
     {
         yield return new WaitForSeconds(2.0f);
         if (SceneManager.GetActiveScene().buildIndex + 1 < SceneManager.sceneCountInBuildSettings)
@@ -26,5 +30,8 @@ public class SceneTest : MonoBehaviour
         {
             TransitionManager.GoToScreen(0);
         }
+        is_next = false;
     }
+
+    
 }
