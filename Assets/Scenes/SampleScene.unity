@@ -1105,7 +1105,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 947485462}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8d5e1c5462df0e4d9de7c006c637aed, type: 3}
   m_Name: 
@@ -1716,7 +1716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 0
   fadeScreen: {fileID: 110812164}
-  npc: {fileID: 0}
+  npc: {fileID: 2102955113}
   Timer: 2
   isTouchingTruck: 0
   level1Section:
@@ -1746,8 +1746,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentNarrationState: 0
   Truck: {fileID: 947485462}
-  Radio: {fileID: 0}
-  audioClips: []
+  Radio: {fileID: 1840547101}
+  audioClips:
+  - {fileID: 8300000, guid: 5cb47cffc019e224395ba4c5fb3e4873, type: 3}
+  - {fileID: 8300000, guid: b269c0da770adac4d8eb97f18ae35aa2, type: 3}
+  - {fileID: 8300000, guid: 227d05fd135e4e548bac38601695555a, type: 3}
+  - {fileID: 8300000, guid: 8c909f193aff4ef4c82f505c44bda059, type: 3}
+  - {fileID: 8300000, guid: 13624402e0663f148b31e94927ab1ffb, type: 3}
+  - {fileID: 8300000, guid: 36fd366d53c65004aa1e93ede95a1abb, type: 3}
+  - {fileID: 8300000, guid: 35ae34eaec7f76e4ebc4296b1544bd4f, type: 3}
+  - {fileID: 8300000, guid: 5430b6b2919e5bf4d9d301ecbe1b4375, type: 3}
+  - {fileID: 8300000, guid: dfef5033cb4a422449136f8c3fdded9b, type: 3}
+  - {fileID: 8300000, guid: f0ae6148c66cea3489d1742235ac68a5, type: 3}
+  - {fileID: 8300000, guid: c6bef834d66f81d43949b056cf1e21a3, type: 3}
   isNarrationPlaying: 0
 --- !u!1 &1583458737 stripped
 GameObject:
@@ -2457,6 +2468,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ch17_nonPBR@Breathing Idle
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 6904203e9670b9e40baab1ca935e8033,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 01c445e7cc999e94ca936508d7d11c6f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
