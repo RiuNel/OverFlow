@@ -14,6 +14,7 @@ public class MoveToStep : MonoBehaviour
     public float truckSpeed = 1f;
     public float positionThreshold = 0.1f; // 목표 지점 도달 거리 임계값
 
+
     public bool stop = false;
     public bool finishStop = false;
 
@@ -32,7 +33,7 @@ public class MoveToStep : MonoBehaviour
     }
 
     void Update()
-    {       
+    {
         if (gestureControllerCached == null) return; // GestureCharacterController가 없으면 종료
     }
 
@@ -47,16 +48,16 @@ public class MoveToStep : MonoBehaviour
     }
 
 
-    public void Level1Move(GameObject target1, GameObject target2) 
+    public void Level1Move(GameObject target1, GameObject target2)
     {
-        if (!stop) 
+        if (!stop)
         {
             if (HasReachedTarget(transform.position, target1.transform.position, 0.1f))
             {
                 stop = true;
             }
         }
-        
+
         if (stop && gestureControllerCached.truck_move) // 트럭이 멈춤?
         {
             MoveToTarget(target2.transform.position); // 두 번째 목표 지점으로 이동
@@ -68,7 +69,6 @@ public class MoveToStep : MonoBehaviour
 
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //마무리
         {
-            Levels.GetComponent<NarrationControl>().level1_finish_narration = true;
             finishStop = true;
             Debug.Log("도착지에 도착");
         }
@@ -91,13 +91,13 @@ public class MoveToStep : MonoBehaviour
         {
             MoveToTarget(target1.transform.position); // 첫 번째 목표 지점으로 이동
         }
-        
+
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //마무리
         {
-            Levels.GetComponent<NarrationControl>().level2_finish_narration = true;
             finishStop = true;
-        } 
-        
+            Debug.Log("도착지에 도착");
+        }
+
     }
 
     public void Level3Move(GameObject target1, GameObject target2)
@@ -117,13 +117,13 @@ public class MoveToStep : MonoBehaviour
         if (!stop && gestureControllerCached.truck_move_right)  // 트럭이 안 멈춤? 제스쳐 맞음?
         {
             gameObject.GetComponent<TruckReverse>().HandleRightRotation(45);
-             // 첫 번째 목표 지점으로 이동
+            // 첫 번째 목표 지점으로 이동
         }
 
         if (HasReachedTarget(transform.position, target2.transform.position, 0.1f)) //마무리
         {
-            Levels.GetComponent<NarrationControl>().level3_finish_narration = true;
             finishStop = true;
+            Debug.Log("도착지에 도착");
         }
 
     }
