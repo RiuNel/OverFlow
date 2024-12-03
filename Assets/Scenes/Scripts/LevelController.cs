@@ -1,15 +1,19 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
+using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    private Coroutine npcAnimationCoroutine;
     public enum LevelState { None, Level1, Level2, Level3 }
     public LevelState currentLevel = LevelState.None;
     private LevelState previousLevel = LevelState.None;
 
     public GameObject fadeScreen;
+    public GameObject npc;
+    public float Timer = 2.0f;
     public bool isTouchingTruck = false;
     private bool hasFadedOut = false;
     public GameObject[] level1Section;
@@ -17,10 +21,13 @@ public class LevelController : MonoBehaviour
     public GameObject[] level3Section;
     public GameObject Truck;
 
-    //Å×½ºÆ® º¯¼ö
+    //í…ŒìŠ¤íŠ¸ ë³€ìˆ˜
     public bool levelChange = false;
 
-    private readonly Vector3 initialTruckPosition = new Vector3(0, 0, 1); // Æ®·°ÀÇ ÃÊ±â À§Ä¡
+    public bool hasUpdated = false;
+    public bool hasUpdated2 = false;
+
+    private readonly Vector3 initialTruckPosition = new Vector3(0, 0, 1); // íŠ¸ëŸ­ì˜ ì´ˆê¸° ìœ„ì¹˜
 
 
     void Start()
@@ -32,10 +39,11 @@ public class LevelController : MonoBehaviour
 
     void Update()
     {
-        //test ÇÔ¼ö
+        //test í•¨ìˆ˜
         if (levelChange && currentLevel == LevelState.Level1)
         {
             ChangeLevel(LevelState.Level2);
+            Debug.Log("ë ˆë²¨ì²´ì¸ì§€");
             levelChange = false;
         }
         if (levelChange && currentLevel == LevelState.Level2)
@@ -45,34 +53,67 @@ public class LevelController : MonoBehaviour
         }
 
 
-        var moveToStep = Truck.GetComponent<MoveToStep>(); //Æ®·° ¾È¿¡ ÀÖ´Â ½ºÅ©¸³Æ® ÈÉÃÄ¿À±â
-        var narrationControl = gameObject.GetComponent<NarrationControl>(); //³ª·¹ÀÌ¼Ç ÄÁÆ®·Ñ ½ºÅ©¸³Æ® °¡Á®¿À±â
+        var moveToStep = Truck.GetComponent<MoveToStep>(); //íŠ¸ëŸ­ ì•ˆì— ìˆëŠ” ìŠ¤í¬ë¦½íŠ¸ í›”ì³ì˜¤ê¸°
+        var narrationControl = gameObject.GetComponent<NarrationControl>(); //ë‚˜ë ˆì´ì…˜ ì»¨íŠ¸ë¡¤ ìŠ¤í¬ë¦½íŠ¸ ê°€ì ¸ì˜¤ê¸°
 
         if (moveToStep == null)
         {
-            Debug.LogError("MoveToStep ÄÄÆ÷³ÍÆ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogError("MoveToStep ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
         if (currentLevel != previousLevel)
         {
-            HandleLevelChange(moveToStep, narrationControl); //·¹º§ÀÌ ¹Ù²ğ ¶§ ·¹º§ µğÀÚÀÎ ¼öÁ¤
-            previousLevel = currentLevel;  //Update ÇÇÇÏ±â À§ÇÑ ¼öÁ¤¿ë º¯¼ö
+            HandleLevelChange(moveToStep, narrationControl); //ë ˆë²¨ì´ ë°”ë€” ë•Œ ë ˆë²¨ ë””ìì¸ ìˆ˜ì •
+            previousLevel = currentLevel;  //Update í”¼í•˜ê¸° ìœ„í•œ ìˆ˜ì •ìš© ë³€ìˆ˜
         }
 
         switch (currentLevel)
         {
             case LevelState.Level1:
                 moveToStep.Level1Move(moveToStep.targetPositions[0], moveToStep.targetPositions[1]);
-                FinishFade(/*ÃÊ³Ö±â*/);
+                if (moveToStep.stop)
+                {
+                    RunOnce("stop");
+                }
+                if (moveToStep.finishStop)
+                {
+                    RunOnce2("finishStop");
+                }
+
+                if (npcAnimationCoroutine == null) // ì´ë¯¸ ì‹¤í–‰ ì¤‘ì´ ì•„ë‹ˆë©´ ì‹œì‘
+                {
+                    npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("back"));
+                }
+                FinishFade(/*ì´ˆë„£ê¸°*/);
                 break;
             case LevelState.Level2:
                 moveToStep.Level2Move(moveToStep.targetPositions[2], moveToStep.targetPositions[3]);
-                FinishFade(/*ÃÊ³Ö±â*/);
+                if (moveToStep.stop)
+                {
+                    RunOnce("stop");
+                }
+                if (moveToStep.finishStop)
+                {
+                    RunOnce2("finishStop");
+                }
+                if (npcAnimationCoroutine == null) // ì´ë¯¸ ì‹¤í–‰ ì¤‘ì´ ì•„ë‹ˆë©´ ì‹œì‘ ë¬¸ì œê°€ ë§ìŒ í™•ì‹¤íˆ
+                {
+                    npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("left"));
+                }
+                FinishFade(/*ì´ˆë„£ê¸°*/);
                 break;
             case LevelState.Level3:
                 moveToStep.Level3Move(moveToStep.targetPositions[4], moveToStep.targetPositions[5]);
-                FinishFade(/*ÃÊ³Ö±â*/);
+                if (moveToStep.stop)
+                {
+                    RunOnce("stop");
+                }
+                if (moveToStep.finishStop)
+                {
+                    RunOnce2("finishStop");
+                }
+                FinishFade(/*ì´ˆë„£ê¸°*/);
                 break;
         }
     }
@@ -85,22 +126,30 @@ public class LevelController : MonoBehaviour
                 ShowLevel(level1Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
-                narrationControl.level1_start_narration = true;
-
+                moveToStep.finishStop = false;
+                hasUpdated = false;
+                hasUpdated2 = false;
+                narrationControl.currentNarrationState = NarrationState.Level1Start;
                 StartFade();
                 break;
             case LevelState.Level2:
                 ShowLevel(level2Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
-                narrationControl.level2_start_narration = true;
+                moveToStep.finishStop = false;
+                hasUpdated = false;
+                hasUpdated2 = false;
+                narrationControl.currentNarrationState = NarrationState.Level2Start;
                 StartFade();
                 break;
             case LevelState.Level3:
                 ShowLevel(level3Section);
                 InitializeTruckPosition();
                 moveToStep.stop = false;
-                narrationControl.level3_start_narration = true;
+                moveToStep.finishStop = false;
+                hasUpdated = false;
+                hasUpdated2 = false;
+                narrationControl.currentNarrationState = NarrationState.Level3Start;
                 StartFade();
                 break;
             default:
@@ -113,8 +162,8 @@ public class LevelController : MonoBehaviour
 
     private void InitializeTruckPosition()
     {
-        Truck.transform.position = initialTruckPosition; // ÃÊ±â À§Ä¡·Î ÀÌµ¿
-        Truck.transform.rotation = Quaternion.identity; // ±âº» È¸Àü°ª
+        Truck.transform.position = initialTruckPosition; // ì´ˆê¸° ìœ„ì¹˜ë¡œ ì´ë™
+        Truck.transform.rotation = Quaternion.identity; // ê¸°ë³¸ íšŒì „ê°’
     }
 
     private void HideAllLevels()
@@ -126,7 +175,7 @@ public class LevelController : MonoBehaviour
 
     private void ShowLevel(GameObject[] levelSections)
     {
-        HideAllLevels(); // ´Ù¸¥ ¼½¼Ç ¼û±â±â
+        HideAllLevels(); // ë‹¤ë¥¸ ì„¹ì…˜ ìˆ¨ê¸°ê¸°
         ShowObjects(levelSections);
     }
 
@@ -151,24 +200,15 @@ public class LevelController : MonoBehaviour
         if (isTouchingTruck && !hasFadedOut)
         {
             fadeScreen.GetComponent<FadeScreen>().FadeOut(fadeDuration);
-            hasFadedOut = true; // ÇÑ ¹ø ½ÇÇàÇßÀ½À» ±â·Ï
+            hasFadedOut = true; // í•œ ë²ˆ ì‹¤í–‰í–ˆìŒì„ ê¸°ë¡
             StartCoroutine(ChangeNextLevel());
+            Debug.Log("ì½”ë£¨í‹´ í˜¸ì¶œë¨");
         }
-    }
-
-    private void StartFade(float fadeDuration = 2f)
-    {
-
-        fadeScreen.GetComponent<FadeScreen>().FadeIn(fadeDuration);
-
-    }
-    public void ChangeLevel(LevelState newLevel)
-    {
-        currentLevel = newLevel;
     }
     IEnumerator ChangeNextLevel()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(2.0f);
+        Debug.Log("ì™œ ì‹¤í–‰ Â‰?");
         hasFadedOut = false;
         switch (currentLevel)
         {
@@ -183,6 +223,110 @@ public class LevelController : MonoBehaviour
                 break;
             case LevelState.Level3:
                 break;
+        }
+    }
+    private void StartFade(float fadeDuration = 2f)
+    {
+
+        fadeScreen.GetComponent<FadeScreen>().FadeIn(fadeDuration);
+
+    }
+    public void ChangeLevel(LevelState newLevel)
+    {
+        currentLevel = newLevel;
+    }
+
+
+    private IEnumerator RepeatNpcChangeAnimation(string name)
+    {
+        while (true) // ë¬´í•œ ë°˜ë³µ
+        {
+            // ì›í•˜ëŠ” ì• ë‹ˆë©”ì´ì…˜ ë³€ê²½ (ì˜ˆ: back, right, left ì¤‘ í•˜ë‚˜ ì„ íƒ)
+            NpcChangeAnimation(name);
+
+            // 2ì´ˆ ëŒ€ê¸°
+            yield return new WaitForSeconds(Timer);
+        }
+    }
+
+    private void NpcChangeAnimation(string name)
+    {
+        // ì• ë‹ˆë©”ì´ì…˜ ë³€ê²½
+        switch (name)
+        {
+            case "back":
+                npc.GetComponent<AniTestScript>().BackAnimation();
+                break;
+            case "right":
+                npc.GetComponent<AniTestScript>().RightAnimation();
+                break;
+            case "left":
+                npc.GetComponent<AniTestScript>().LeftAnimation();
+                break;
+        }
+    }
+    void RunOnce(string stopName)
+    {
+        if (!hasUpdated)
+        {
+            switch (currentLevel)
+            {
+                case LevelState.Level1:
+                    if (stopName == "stop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Stop;
+
+                    break;
+
+                case LevelState.Level2:
+                    if (stopName == "stop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level2Stop;
+                    break;
+
+                case LevelState.Level3:
+                    if (stopName == "stop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level3Stop;
+                    break;
+                default:
+                    Debug.LogWarning("ì•Œ ìˆ˜ ì—†ëŠ” LevelStateì…ë‹ˆë‹¤.");
+                    break;
+            }
+            hasUpdated = true; // í”Œë˜ê·¸ ì„¤ì •
+        }
+    }
+
+    void RunOnce2(string stopName)
+    {
+        if (!hasUpdated2)
+        {
+            switch (currentLevel)
+            {
+                case LevelState.Level1:
+                    if (stopName == "finishStop")
+                    {
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Finish;
+                        Debug.Log("ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡ã…‡");
+                    }
+
+                    break;
+
+                case LevelState.Level2:
+
+                    if (stopName == "finishStop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level2Finish;
+                    break;
+
+                case LevelState.Level3:
+
+                    if (stopName == "finishStop")
+                        gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level3Finish;
+                    break;
+
+
+                default:
+                    Debug.LogWarning("ì•Œ ìˆ˜ ì—†ëŠ” LevelStateì…ë‹ˆë‹¤.");
+                    break;
+            }
+            hasUpdated2 = true; // í”Œë˜ê·¸ ì„¤ì •
         }
     }
 }
