@@ -1,58 +1,72 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.AffordanceSystem.Receiver.Transformation;
 
-public class Move_Truck : MonoBehaviour
+public class TruckMovement : MonoBehaviour
 {
-    public Transform First_Point;
-    public Transform Second_Point;
-    public Transform Last_Point;
-    public int Point = 1;
-    public AudioSource _audio;
-    public AudioClip[] clips;
-    // Start is called before the first frame update
-    void Start()
+    public Transform[] positions;
+    public float speed = 5f;
+    public AudioClip movingSound;
+    public AudioClip stoppingSound;
+
+    private int currentTargetIndex = 1;
+    private bool isStopped = false;
+    private float stopTimer = 0f;
+    private AudioSource audioSource;
+
+    private void Start()
     {
-        _audio = GetComponent<AudioSource>();
-        Second_Point = gameObject.transform;
-        StartCoroutine(Move());
+        audioSource = gameObject.AddComponent<AudioSource>();
+        PlayMovingSound();
     }
 
-    // Update is called once per frame
-    IEnumerator SetPoint(float time)
+    private void Update()
     {
-        yield return new WaitForSeconds(time);
-        Point++;
-        
-    }
+        if (positions.Length == 0) return;
 
-    IEnumerator Move()
-    {
-        if (Point == 0)
+        if (isStopped)
         {
-            transform.position = Vector3.MoveTowards(transform.position, Second_Point.position, 0.001f * Time.deltaTime);
-            if (transform.position == Second_Point.position)
+            stopTimer += Time.deltaTime;
+            if (stopTimer >= 5f)
             {
-                _audio.clip = clips[0];
-                _audio.Play();
-                StartCoroutine(SetPoint(5.0f));
+                isStopped = false;
+                PlayMovingSound();
             }
+            return;
         }
-        else if (Point == 1)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, Last_Point.position, 0.001f * Time.deltaTime);
-            _audio.clip = clips[1];
-            _audio.Play();
-            StartCoroutine(SetPoint(0.1f));
-        }
-        else if (Point == 2)
-        {
-            transform.position = First_Point.position;
-            Point = 0;
-        }
-        StartCoroutine(Move());
 
-        yield return null;
+        Transform target = positions[currentTargetIndex];
+        float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, target.position, step);
+
+        if (Vector3.Distance(transform.position, target.position) < 0.1f)
+        {
+            if (currentTargetIndex == 1) // Position2에 도착했을 때
+            {
+                isStopped = true;
+                stopTimer = 0f;
+                PlayStoppingSound();
+            }
+            if(currentTargetIndex == 2)
+            {
+                currentTargetIndex = 0;
+                transform.position = positions[0].position;
+            }
+
+            currentTargetIndex = (currentTargetIndex + 1) % positions.Length;
+        }
+    }
+
+    private void PlayMovingSound()
+    {
+        audioSource.clip = movingSound;
+        audioSource.Play();
+    }
+
+    private void PlayStoppingSound()
+    {
+        audioSource.clip = stoppingSound;
+        audioSource.Play();
     }
 }
