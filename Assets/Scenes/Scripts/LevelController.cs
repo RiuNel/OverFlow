@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class LevelController : MonoBehaviour
 {
@@ -201,7 +203,7 @@ public class LevelController : MonoBehaviour
         {
             fadeScreen.GetComponent<FadeScreen>().FadeOut(fadeDuration);
             hasFadedOut = true; // 한 번 실행했음을 기록
-            StartCoroutine(ChangeNextLevel());
+            StartCoroutine(FinishNarrationWait());
             Debug.Log("코루틴 호출됨");
         }
     }
@@ -210,6 +212,11 @@ public class LevelController : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         Debug.Log("왜 실행 ?");
         hasFadedOut = false;
+        // 만약 현재 레벨이 3이면서 다음 레벨로 이동하려고 할 경우:
+        if (currentLevel == LevelState.Level3)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
         switch (currentLevel)
         {
             case LevelState.None:
@@ -224,6 +231,12 @@ public class LevelController : MonoBehaviour
             case LevelState.Level3:
                 break;
         }
+    }
+
+    IEnumerator FinishNarrationWait()
+    {
+        yield return new WaitForSeconds(3.0f);
+        StartCoroutine(ChangeNextLevel());
     }
     private void StartFade(float fadeDuration = 2f)
     {
