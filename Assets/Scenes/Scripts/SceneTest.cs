@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneTest : MonoBehaviour
 {
     public SceneTransitionManager TransitionManager;
-    public bool is_next;    
+    public bool is_next;
         
     private void Start()
     {
