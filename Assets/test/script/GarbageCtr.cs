@@ -19,11 +19,6 @@ public class GarbageCtr : MonoBehaviour
 
     public bool isTouch = false;
 
-    /*private float collisionTime; // 충돌이 시작된 시간을 기록
-    private float elapsedTime; // 충돌 시간 기록
-    private bool isColliding;    // 현재 충돌 중인지 확인
-    private float safeTime = 3f;*/
-
 
     private void OnEnable()
     {
@@ -86,39 +81,4 @@ public class GarbageCtr : MonoBehaviour
             Invoke("showTrash", 3f);
         }
     }
-
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "knife")
-        {
-            isColliding = true;
-            elapsedTime = 0f;
-            collisionTime = Time.time;
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (isColliding)
-        {
-            elapsedTime = Time.time - collisionTime;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (elapsedTime < safeTime)
-        {
-            Debug.Log("오염물질 분출");
-        }
-        else
-        {
-            Debug.Log("GOOOOOOOOOOOOOOOOOOOOOOOOOD");
-        }
-
-        // 충돌이 끝날 때 상태 초기화
-        isColliding = false;
-        collisionTime = 0f;
-        elapsedTime = 0f;
-    }*/
 }
