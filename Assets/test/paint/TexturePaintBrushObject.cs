@@ -36,7 +36,7 @@ namespace Rito.TexturePainter
 
         private void FixedUpdate()
         {
-            UpdateBrushColorOnEditor();
+            //UpdateBrushColorOnEditor();
 
             if (Input.GetMouseButton(0) == false) return;
 
@@ -131,9 +131,9 @@ namespace Rito.TexturePainter
             float hRes = res * 0.5f;
             float sqrSize = hRes * hRes;
 
-            brushTexture = new Texture2D(res, res);
+            brushTexture = new Texture2D(res, res,TextureFormat.Alpha8,true);
             brushTexture.filterMode = FilterMode.Point;
-            brushTexture.alphaIsTransparency = true;
+            //brushTexture.alphaIsTransparency = true;
 
             for (int y = 0; y < res; y++)
             {
@@ -155,9 +155,9 @@ namespace Rito.TexturePainter
 
             DestroyImmediate(CopiedBrushTexture);
 
-            CopiedBrushTexture = new Texture2D(brushTexture.width, brushTexture.height);
+            CopiedBrushTexture = new Texture2D(brushTexture.width, brushTexture.height, TextureFormat.Alpha8,true);
             CopiedBrushTexture.filterMode = FilterMode.Point;
-            CopiedBrushTexture.alphaIsTransparency = true;
+            //CopiedBrushTexture.alphaIsTransparency = true;
 
             int height = brushTexture.height;
             int width = brushTexture.width;
@@ -179,34 +179,34 @@ namespace Rito.TexturePainter
             CopiedBrushTexture.Apply();
         }
 
-        // 에디터에서 브러시 색상 업데이트
-#if UNITY_EDITOR
-        private Color prevBrushColor;
-        private float brushTextureUpdateCounter = 0f;
-        private const float BrushTextureUpdateCounterInitValue = 0.7f;
-        private void OnValidate()
-        {
-            if (Application.isPlaying && prevBrushColor != brushColor)
-            {
-                brushTextureUpdateCounter = BrushTextureUpdateCounterInitValue;
-                prevBrushColor = brushColor;
-            }
-        }
-#endif
-        [System.Diagnostics.Conditional("UNITY_EDITOR")]
-        private void UpdateBrushColorOnEditor()
-        {
-            if (brushTextureUpdateCounter > 0f &&
-                brushTextureUpdateCounter <= BrushTextureUpdateCounterInitValue)
-            {
-                brushTextureUpdateCounter -= Time.deltaTime;
-            }
+        //        // 에디터에서 브러시 색상 업데이트
+        //#if UNITY_EDITOR
+        //        private Color prevBrushColor;
+        //        private float brushTextureUpdateCounter = 0f;
+        //        private const float BrushTextureUpdateCounterInitValue = 0.7f;
+        //        private void OnValidate()
+        //        {
+        //            if (Application.isPlaying && prevBrushColor != brushColor)
+        //            {
+        //                brushTextureUpdateCounter = BrushTextureUpdateCounterInitValue;
+        //                prevBrushColor = brushColor;
+        //            }
+        //        }
+        //#endif
+        //[System.Diagnostics.Conditional("UNITY_EDITOR")]
+        //private void UpdateBrushColorOnEditor()
+        //{
+        //    if (brushTextureUpdateCounter > 0f &&
+        //        brushTextureUpdateCounter <= BrushTextureUpdateCounterInitValue)
+        //    {
+        //        brushTextureUpdateCounter -= Time.deltaTime;
+        //    }
 
-            if (brushTextureUpdateCounter < 0f)
-            {
-                CopyBrushTexture();
-                brushTextureUpdateCounter = 9999f;
-            }
-        }
+        //    if (brushTextureUpdateCounter < 0f)
+        //    {
+        //        CopyBrushTexture();
+        //        brushTextureUpdateCounter = 9999f;
+        //    }
+        //}
     }
 }
