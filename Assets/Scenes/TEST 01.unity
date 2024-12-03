@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.09614243, g: 0.103311844, b: 0.12817384, a: 1}
+  m_IndirectSpecularColor: {r: 0.09623847, g: 0.1032042, b: 0.12786496, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10383,6 +10383,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8663987f9f54afb448992e3a4c16d100, type: 3}
   - {fileID: 8300000, guid: 2f603a5ebd95dfd4cae61e09c8083943, type: 3}
   GameManager: {fileID: 936202877}
+  SceneTest: {fileID: 1502848414}
   oneShotStart: 0
   oneShotFirst: 0
   oneshotFirstDone: 0
@@ -10390,6 +10391,7 @@ MonoBehaviour:
   oneShotDone: 0
   oneShotGarbageCut: 0
   oneShotHint: 0
+  oneShotOff: 0
 --- !u!4 &1550852679
 Transform:
   m_ObjectHideFlags: 0

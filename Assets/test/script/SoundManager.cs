@@ -165,6 +165,7 @@ public class SoundManager : MonoBehaviour
     //
 
     public GameManager GameManager;
+    public SceneTest SceneTest;
 
     private void Start()
     {
@@ -174,6 +175,7 @@ public class SoundManager : MonoBehaviour
         oneShotDone = false;
         oneShotGarbageCut = false;
         oneShotHint = false;
+        oneShotOff = false;
         //PlayNarrationB(startScenes);
 
         startNarration();
@@ -186,10 +188,16 @@ public class SoundManager : MonoBehaviour
     public bool oneShotDone = false;
     public bool oneShotGarbageCut = false;
     public bool oneShotHint = false;
+    public bool oneShotOff = false;
 
     public void startNarration()
     {
         GameManager.isStart = true;
+    }
+
+    public void offNarration()
+    {
+        SceneTest.is_next = true;
     }
 
     private void Update()
@@ -229,6 +237,12 @@ public class SoundManager : MonoBehaviour
         if (GameManager.isDone >= 16 && !oneShotDone)
         {
             PlayNarrationB(finishGroup, ref oneShotDone);
+        }
+
+        if(oneShotDone && CEnd && !oneShotOff)
+        {
+            oneShotOff = true;
+            offNarration();
         }
     }
 
