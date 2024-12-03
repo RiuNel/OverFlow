@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.09616084, g: 0.10336225, b: 0.12825604, a: 1}
+  m_IndirectSpecularColor: {r: 0.09623847, g: 0.1032042, b: 0.12786496, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -238,27 +238,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 80120924}
   clipsWithDelays:
-  - clip: {fileID: 8300000, guid: 138d46a8d7b0e6c49903b7d6701f9607, type: 3}
+  - clip: {fileID: 8300000, guid: 0a306a708ea575141ad3ec5a363f2304, type: 3}
     delay: 0.5
-  - clip: {fileID: 8300000, guid: 78c96dbd676cbee4a8d981e251fc9be7, type: 3}
+  - clip: {fileID: 8300000, guid: ac1b5ffda9de15a4498aee83c90a5eca, type: 3}
     delay: 1
-  - clip: {fileID: 8300000, guid: 6afe6c2907ae2814787da44d2029e5bd, type: 3}
+  - clip: {fileID: 8300000, guid: b1af24d9d1e4a0d4088084710fbb29e0, type: 3}
     delay: 1
-  - clip: {fileID: 8300000, guid: 863dc9929c53ad449ac8fcc9ae29a650, type: 3}
+  - clip: {fileID: 8300000, guid: 04f1c3b56f545ff499ade8cb27916f09, type: 3}
     delay: 2
-  - clip: {fileID: 8300000, guid: a14d933fe1e4f6c4d9ae72f28d18122c, type: 3}
+  - clip: {fileID: 8300000, guid: c828d24e1290eed489a9e48c8f574c0b, type: 3}
     delay: 1
-  - clip: {fileID: 8300000, guid: 6f9f9d909047df94daace77913065110, type: 3}
+  - clip: {fileID: 8300000, guid: d541a4c78e0532149868a4b0e289d2ab, type: 3}
     delay: 1
-  - clip: {fileID: 8300000, guid: dc5a2cbd364d28f4f8c641011d158adb, type: 3}
+  - clip: {fileID: 8300000, guid: 2210e470b4be63c498df73d1f50e689f, type: 3}
     delay: 0.5
-  - clip: {fileID: 8300000, guid: 6fda58f4c0f85f04a8381f5c6a09e29c, type: 3}
+  - clip: {fileID: 8300000, guid: fded4887e83110f42a93101bfec45a58, type: 3}
     delay: 2
-  - clip: {fileID: 8300000, guid: 7bde64dcb97de214c8fbdc2c65b61007, type: 3}
+  - clip: {fileID: 8300000, guid: 15ace3ad951f93c4ca47ec23167067ba, type: 3}
     delay: 1
-  - clip: {fileID: 8300000, guid: 5d229c2709439164dbba3c76e71ad121, type: 3}
+  - clip: {fileID: 8300000, guid: 0a319ef87a3395042877e5df189a7594, type: 3}
     delay: 1
-  - clip: {fileID: 8300000, guid: 806a9891f10e5af4692ff0360f8e7d13, type: 3}
+  - clip: {fileID: 8300000, guid: b8abc623672eec444a142e9773e8ddf7, type: 3}
     delay: 0
 --- !u!4 &80120923
 Transform:
@@ -1390,6 +1390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TransitionManager: {fileID: 1896144911}
+  is_next: 0
 --- !u!4 &517910292
 Transform:
   m_ObjectHideFlags: 0
