@@ -8,14 +8,6 @@ using UnityEngine.XR.OpenXR;
 using UnityEngine.XR.OpenXR.Input;
 using VRGestureDetection.Core;
 
-
-//안전하게 이동: uppercut right hand
-//우로/좌로 lasso right/left
-//정지: pulldown right hand
-//긴급정지: windmill arms
-
-
-
 namespace VRGestureDetection.Sample
 {
     public class GestureCharacterController : MonoBehaviour
@@ -30,9 +22,6 @@ namespace VRGestureDetection.Sample
         private Vector3 currentMovementDirection;
         public float currentSpeed = 0f;
         public float targetSpeed = 0f;
-        //private float heldSpeed = 0f;
-        //private float holdSpeedTime = 0.6f;
-        //private bool _accelerating = false;
 
         //트럭 이동 여부 변수....................
 
@@ -51,13 +40,18 @@ namespace VRGestureDetection.Sample
         void Start()
         {
             gestureDetection ??= GestureDetection.Instance;
-            LoadGestures();
+            if (!levels.GetComponent<NarrationControl>().isNarrationPlaying)
+            {
+                LoadGestures();
+            }
+            
         }
 
         void LoadGestures()
         {
-
-            //reverse move
+            if (!levels.GetComponent<NarrationControl>().isNarrationPlaying)
+            {
+                //reverse move
             AddGestureEvent("two hand throw overhand", TruckMoveGesture);
 
             //left move
@@ -67,6 +61,8 @@ namespace VRGestureDetection.Sample
             //right move
             AddGestureEvent("pull down right hand", TruckMoveGesture);
             AddGestureEvent("upper cut right hand", TruckMoveGesture); // 좌로 이동
+            }
+            
 
         }
 
@@ -80,28 +76,19 @@ namespace VRGestureDetection.Sample
 
         void Update()
         {
-            /*CheckGrounded(); 뭔지 잘 모르겠음
-            HandleRunningGesture(); 
-            HandleMovement();
-            UpdateFogSettings();*/
             if (!levels.GetComponent<NarrationControl>().isNarrationPlaying)
             {
                 characterController.Move(currentMovementDirection * Time.deltaTime * currentSpeed);
                 testGesture = gestureDetection.GetCurrentGesture();
                 TruckMoveGesture();
+                Debug.Log(gestureDetection.GetCurrentGesture());
+                Debug.Log("Gesture: " + levels.GetComponent<NarrationControl>().isNarrationPlaying);
             }
-
-            
-            Debug.Log(gestureDetection.GetCurrentGesture());
-            
         }
 
         void TruckMoveGesture()
         {
             string detectedGesture = gestureDetection.GetCurrentGesture();
-
-
-
 
             if (detectedGesture == "two hand throw overhand")
             {
@@ -136,7 +123,6 @@ namespace VRGestureDetection.Sample
                 truck_stop = true; //정지
             }
 
-            Debug.Log(detectedGesture);
         }
         public void TruckIdleReset()
         {

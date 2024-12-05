@@ -29,7 +29,7 @@ public class NarrationControl : MonoBehaviour
     private AudioSource audioSource; // 오디오 재생을 담당하는 컴포넌트
     public List<AudioClip> audioClips; // 재생할 오디오 클립 리스트
 
-    public bool isNarrationPlaying = false; // 내레이션 진행 상태
+    public bool isNarrationPlaying = true; // 내레이션 진행 상태
 
     private void Start()
     {
