@@ -1376,7 +1376,7 @@ MonoBehaviour:
   - {fileID: 1362099576}
   gestureController: {fileID: 96905959}
   Levels: {fileID: 1482747347}
-  truckSpeed: 1
+  truckSpeed: 3
   positionThreshold: 0.1
   stop: 0
   finishStop: 0
@@ -2039,6 +2039,7 @@ MonoBehaviour:
   - {fileID: 1362099576}
   Truck: {fileID: 947485462}
   levelChange: 0
+  canExecute: 1
   hasUpdated: 0
   hasUpdated2: 0
 --- !u!114 &1482747350
