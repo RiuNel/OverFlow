@@ -29,9 +29,7 @@ public class NarrationControl : MonoBehaviour
     private AudioSource audioSource; // 오디오 재생을 담당하는 컴포넌트
     public List<AudioClip> audioClips; // 재생할 오디오 클립 리스트
 
-    private int currentClipIndex = 0; // 현재 재생 중인 클립의 인덱스
     public bool isNarrationPlaying = false; // 내레이션 진행 상태
-    private bool hasTriggeredFinishNarration = false; // 종료 내레이션 중복 실행 방지
 
     private void Start()
     {
@@ -135,7 +133,6 @@ public class NarrationControl : MonoBehaviour
     {
         currentNarrationState = NarrationState.None; // 내레이션 상태 초기화
         isNarrationPlaying = false; // 내레이션 진행 상태 초기화
-        hasTriggeredFinishNarration = false; // 종료 내레이션 중복 방지 플래그 초기화
     }
 
     // 지정된 오디오 클립을 재생

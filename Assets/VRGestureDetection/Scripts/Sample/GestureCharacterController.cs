@@ -57,7 +57,7 @@ namespace VRGestureDetection.Sample
         void LoadGestures()
         {
 
-            //reverse move  
+            //reverse move
             AddGestureEvent("two hand throw overhand", TruckMoveGesture);
 
             //left move
@@ -84,15 +84,16 @@ namespace VRGestureDetection.Sample
             HandleRunningGesture(); 
             HandleMovement();
             UpdateFogSettings();*/
-            characterController.Move(currentMovementDirection * Time.deltaTime * currentSpeed);
             if (!levels.GetComponent<NarrationControl>().isNarrationPlaying)
             {
                 characterController.Move(currentMovementDirection * Time.deltaTime * currentSpeed);
+                testGesture = gestureDetection.GetCurrentGesture();
+                TruckMoveGesture();
             }
 
-            TruckMoveGesture();
+            
             Debug.Log(gestureDetection.GetCurrentGesture());
-            testGesture = gestureDetection.GetCurrentGesture();
+            
         }
 
         void TruckMoveGesture()
