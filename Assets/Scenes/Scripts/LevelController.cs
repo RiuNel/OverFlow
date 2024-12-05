@@ -24,6 +24,7 @@ public class LevelController : MonoBehaviour
 
     //테스트 변수
     public bool levelChange = false;
+    public bool canExecute = true;
 
     public bool hasUpdated = false;
     public bool hasUpdated2 = false;
@@ -76,15 +77,28 @@ public class LevelController : MonoBehaviour
                 if (moveToStep.stop)
                 {
                     RunOnce("stop");
+                    if (canExecute)
+                    {
+                        canExecute = false;
+                        NpcChangeAnimation(AnimationState.Back);
+                        StartCoroutine(RepeatNpcChangeAnimation());
+                    }
                 }
                 if (moveToStep.finishStop)
                 {
                     RunOnce2("finishStop");
                 }
 
-                if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작
+                if (npcAnimationCoroutine == null && !moveToStep.stop) // 이미 실행 중이 아니면 시작
                 {
-                    npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("back"));
+
+                    if (canExecute)
+                    {
+                        canExecute = false;
+                        NpcChangeAnimation(AnimationState.Back);
+                        StartCoroutine(RepeatNpcChangeAnimation());
+                    }
+
                 }
                 FinishFade(/*초넣기*/);
                 break;
@@ -93,14 +107,25 @@ public class LevelController : MonoBehaviour
                 if (moveToStep.stop)
                 {
                     RunOnce("stop");
+                    if (canExecute)
+                    {
+                        canExecute = false;
+                        NpcChangeAnimation(AnimationState.Left);
+                        StartCoroutine(RepeatNpcChangeAnimation());
+                    }
                 }
                 if (moveToStep.finishStop)
                 {
                     RunOnce2("finishStop");
                 }
-                if (npcAnimationCoroutine == null) // 이미 실행 중이 아니면 시작 문제가 많음 확실히
+                if (npcAnimationCoroutine == null && !moveToStep.stop) // 이미 실행 중이 아니면 시작 문제가 많음 확실히
                 {
-                    npcAnimationCoroutine = StartCoroutine(RepeatNpcChangeAnimation("left"));
+                    if (canExecute)
+                    {
+                        canExecute = false;
+                        NpcChangeAnimation(AnimationState.Back);
+                        StartCoroutine(RepeatNpcChangeAnimation());
+                    }
                 }
                 FinishFade(/*초넣기*/);
                 break;
@@ -109,10 +134,25 @@ public class LevelController : MonoBehaviour
                 if (moveToStep.stop)
                 {
                     RunOnce("stop");
+                    if (canExecute)
+                    {
+                        canExecute = false;
+                        NpcChangeAnimation(AnimationState.Back);
+                        StartCoroutine(RepeatNpcChangeAnimation());
+                    }
                 }
                 if (moveToStep.finishStop)
                 {
                     RunOnce2("finishStop");
+                }
+                if (npcAnimationCoroutine == null && !moveToStep.stop) // 이미 실행 중이 아니면 시작 문제가 많음 확실히
+                {
+                    if (canExecute)
+                    {
+                        canExecute = false;
+                        NpcChangeAnimation(AnimationState.Right);
+                        StartCoroutine(RepeatNpcChangeAnimation());
+                    }
                 }
                 FinishFade(/*초넣기*/);
                 break;
@@ -249,34 +289,39 @@ public class LevelController : MonoBehaviour
     }
 
 
-    private IEnumerator RepeatNpcChangeAnimation(string name)
+    private IEnumerator RepeatNpcChangeAnimation()
     {
-        while (true) // 무한 반복
-        {
-            // 원하는 애니메이션 변경 (예: back, right, left 중 하나 선택)
-            NpcChangeAnimation(name);
-
-            // 2초 대기
-            yield return new WaitForSeconds(Timer);
-        }
+        yield return new WaitForSeconds(2);
+        npc.GetComponent<Transform>().rotation = Quaternion.Euler(0, 200, 0);
+        canExecute = true; // 다시 실행 가능
     }
 
-    private void NpcChangeAnimation(string name)
+    private void NpcChangeAnimation(AnimationState state)
     {
+        var aniTest = npc.GetComponent<AniTestScript>();
+
         // 애니메이션 변경
-        switch (name)
+        switch (state)
         {
-            case "back":
-                npc.GetComponent<AniTestScript>().BackAnimation();
+            case AnimationState.Back:
+                aniTest.BackAnimation();
                 break;
-            case "right":
-                npc.GetComponent<AniTestScript>().RightAnimation();
+            case AnimationState.Right:
+                aniTest.RightAnimation();
                 break;
-            case "left":
-                npc.GetComponent<AniTestScript>().LeftAnimation();
+            case AnimationState.Left:
+                aniTest.LeftAnimation();
                 break;
         }
     }
+
+    public enum AnimationState
+    {
+        Back,
+        Right,
+        Left
+    }
+
     void RunOnce(string stopName)
     {
         if (!hasUpdated)
@@ -286,7 +331,6 @@ public class LevelController : MonoBehaviour
                 case LevelState.Level1:
                     if (stopName == "stop")
                         gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Stop;
-
                     break;
 
                 case LevelState.Level2:
@@ -316,7 +360,7 @@ public class LevelController : MonoBehaviour
                     if (stopName == "finishStop")
                     {
                         gameObject.GetComponent<NarrationControl>().currentNarrationState = NarrationState.Level1Finish;
-                        Debug.Log("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+
                     }
 
                     break;
@@ -341,4 +385,6 @@ public class LevelController : MonoBehaviour
             hasUpdated2 = true; // 플래그 설정
         }
     }
+
+
 }

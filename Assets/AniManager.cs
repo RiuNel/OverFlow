@@ -21,6 +21,7 @@ public class AniManager : MonoBehaviour
     GameObject worker;
     public SceneTest scenechange;
     public bool is_start_coroutine = false;
+    public GameObject Start_Button;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,6 +33,7 @@ public class AniManager : MonoBehaviour
     {
         is_start=true;
         StartCoroutine(Start_animation());
+        Destroy(Start_Button);
     }
     IEnumerator Start_animation()
     {

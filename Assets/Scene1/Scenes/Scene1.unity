@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1910084911}
-  m_IndirectSpecularColor: {r: 0.09623847, g: 0.1032042, b: 0.12786496, a: 1}
+  m_IndirectSpecularColor: {r: 0.09614243, g: 0.103311844, b: 0.12817384, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -990,6 +990,18 @@ MonoBehaviour:
   m_AllowGazeAssistance: 0
   m_FirstHoverEntered:
     m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 33563491}
         m_TargetAssemblyTypeName: AniManager, Assembly-CSharp
@@ -1003,18 +1015,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_LastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
   m_LastSelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -1700,6 +1700,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1077712506}
   m_LocalEulerAnglesHint: {x: 89.115, y: -52.909, z: 10.676}
+--- !u!1001 &1826661382
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1876107951798336830, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2382954269203704036, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_Name
+      value: XR Origin (XR Rig) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 11.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.61433196
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7890478
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 104.193
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446665133004736227, guid: e49724c093e23f448b964da17f48cf39,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 7779700640079955526, guid: e49724c093e23f448b964da17f48cf39, type: 3}
+    - {fileID: 6088922577975903694, guid: e49724c093e23f448b964da17f48cf39, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e49724c093e23f448b964da17f48cf39, type: 3}
 --- !u!1 &1842913693
 GameObject:
   m_ObjectHideFlags: 0
@@ -2241,3 +2316,4 @@ SceneRoots:
   - {fileID: 1077712500}
   - {fileID: 33563492}
   - {fileID: 1898918074}
+  - {fileID: 1826661382}
