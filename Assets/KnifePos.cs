@@ -34,7 +34,7 @@ public class KnifePos : MonoBehaviour
             isKnifePos = false;
         }
 
-        if(!GameManager.isGrab && isKnife && returnKnifeCoroutine == null)
+        if(!GameManager.isGrab && isKnife && !isKnifePos && returnKnifeCoroutine == null)
         {
             // 코루틴이 실행 중이 아니면 새로 시작
             returnKnifeCoroutine = StartCoroutine(ReturnKnifeCoroutine());
